@@ -1,9 +1,9 @@
 ROOT_DIR=$(PWD)
-SRC_DIR=$(ROOT_DIR)
-INC_DIR=$(ROOT_DIR)
-OUT_DIR=$(ROOT_DIR)
+SRC_DIR=$(ROOT_DIR)/src
+INC_DIR=$(ROOT_DIR)/include
+OUT_DIR=$(ROOT_DIR)/bin
 CC=g++
-CFLAGS=-W -Wall -ansi -pedantic
+CFLAGS=-W -Wall -ansi -pedantic -std=c++0x
 LDFLAGS=
 
 INCLUDE=-I. -I/usr/include -I$(INC_DIR)

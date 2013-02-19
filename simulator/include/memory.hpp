@@ -1,26 +1,18 @@
 #ifndef _MEMORY
 #define _MEMORY
-#define DATA_MEM_SIZE 65536
-#define PROG_MEM_SIZE 65536
+#include <cstdint>
+template <int N>
 class Memory {
     private:
-        int* addr;
-        int* in;
-        int* out;
+        int32_t* addr;
+        int32_t* in;
+        int32_t* out;
 
+        int32_t memory[N];
     public:
-        virtual void load () = 0;
-        virtual void store () = 0;
-};
-
-class Data_Memory:Memory {
-    private:
-        int memory[DATA_MEM_SIZE];
-};
-
-class Program_Memory:Memory {
-    private:
-        int memory[PROG_MEM_SIZE];
+        Memory(int32_t* _addr, int32_t* _in, int32_t* _out);
+        void load ();
+        void store ();
 };
 #endif
 
