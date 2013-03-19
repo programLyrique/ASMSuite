@@ -4,6 +4,26 @@
 #include "alu.hpp"
 #include "registers.hpp"
 #include "memory.hpp"
+
+#define D_N 65536
+#define P_N 65536
+
+#define ALU_INST 0
+#define MEM_INST 1
+#define IO_INST 2
+#define JMP_INST 3
+
+#define JMP 0
+#define JRS 1
+#define JRE 4
+
+const int32_t mask_inst = 3;
+const int32_t mask_op = 7;
+const int32_t mask_im = 1;
+const int32_t mask_reg = 31;
+const int32_t mask_im_value = 65535;
+const int32_t mask_addr_26 = 67108863; // 2^26 - 1
+const int32_t mask_addr_11 = 2047;
 class Control_unit {
     private:
         // linking with the program memory
@@ -14,9 +34,9 @@ class Control_unit {
         int32_t* imm_bus;
 
         // flags
-        int32_t* flag_z;
-        int32_t* flag_p;
-        int32_t* flag_n;
+        bool* flag_z;
+        bool* flag_p;
+        bool* flag_n;
 
         // Other component of the CPU commanded by the control unit.
         ALU* alu;
@@ -24,17 +44,32 @@ class Control_unit {
         Memory* program_memory;
         Registers* registers;
 
-        int type_inst;
-        int op_code;
-        bool im;
-        int r1, r2, r3;
-        int addr26, addr11;
+        int32_t type_inst;
+        int32_t op_code;
+        int32_t im;
+        int32_t r1, r2, r3;
+        int32_t im_value;
+        int32_t addr26, addr11;
 
+        void read_inst ();
+        void decode_inst ();
+        void execute_inst ();
+        void read_registers ();
+        void jump_instruction ();
+        void execute_ALU_op ();
+        void execute_MEM_op ();
+        void execute_IO_op ();
+        void write_registers ();
     public:
+        /*
+         * Prerequisite : pc and inst are the addr and out field of the
+         * program memory. imm_bus is one of the two "input" buses. The flag
+         * as correctly linked to the ALU.
+         */
         Control_unit (int32_t* _pc, int32_t* _inst, int32_t* _imm_bus,
-                      int32_t* _flag_z, int32_t* _flag_p, int32_t* _flag_n,
-                      ALU* _alu, Memory* _data_memory; Memory* _program_memory,
-                      Registers* _registers)
+                      bool* _flag_z, bool* _flag_p, bool* _flag_n,
+                      ALU* _alu, Memory* _data_memory, 
+                      Memory* _program_memory, Registers* _registers)
         {
             pc = _pc;
             inst = _inst;

@@ -1,6 +1,6 @@
 #include "alu.hpp"
-ALU::ALU(int32_t* _in1, int32_t* _in2, int32_t* _out, int32_t* _flag_z,
-         int32_t* _flag_p, int32_t* _flag_n)
+ALU::ALU(int32_t* _in1, int32_t* _in2, int32_t* _out, bool* _flag_z,
+         bool* _flag_p, bool* _flag_n)
 {
     in1 = _in1;
     in2 = _in2;
@@ -48,13 +48,13 @@ void ALU::do_sl ()
 void ALU::do_op (int op)
 {
     switch (op) {
-        case 0: do_add(); break;
-        case 1: do_sub(); break;
-        case 2: do_and(); break;
-        case 3: do_or(); break;
-        case 4: do_xor(); break;
-        case 5: do_sr(); break;
-        case 6: do_sl(); break;
+        case ADD: do_add(); break;
+        case SUB: do_sub(); break;
+        case AND: do_and(); break;
+        case OR: do_or(); break;
+        case XOR: do_xor(); break;
+        case SR: do_sr(); break;
+        case SL: do_sl(); break;
         default: ;
     }
     *out == 0 ? *flag_z = 1 : *flag_z = 0;

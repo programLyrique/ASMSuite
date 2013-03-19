@@ -1,7 +1,9 @@
 #ifndef _MEMORY
 #define _MEMORY
 #include <cstdint>
-template <int N>
+#define IN 0
+#define OUT 1
+#define N 65536
 class Memory {
     private:
         int32_t* addr;

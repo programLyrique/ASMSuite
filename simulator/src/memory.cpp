@@ -1,21 +1,18 @@
 #include "memory.hpp"
 
-template <int N>
-Memory<N>::Memory(int32_t* _addr, int32_t* _in, int32_t* _out)
+Memory::Memory(int32_t* _addr, int32_t* _in, int32_t* _out)
 {
     addr = _addr;
     in = _in;
     out = _out;
 }
 
-template <int N>
-void Memory<N>::load ()
+void Memory::load ()
 {
     *out = memory[*addr];
 }
 
-template <int N>
-void Memory<N>::store ()
+void Memory::store ()
 {
     memory[*addr] = *in;
 }
