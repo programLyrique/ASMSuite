@@ -1,4 +1,4 @@
-### Debugger
+# Debugger
 
 Possiblité d'afficher ça dans une console, 
 ou de l'envoyer à travers un pipe, ou autre ?
@@ -26,10 +26,10 @@ c.f. gdb
 11. tracepoints
 12. user-defined
 
-# alias d'autres instructions
+## alias d'autres instructions
 -> non
 
-#breakpoints
+## breakpoints
 
 - break line : placer un breakpoint à la ligne line (si macro instruction, à la première instruction correspondante)
 - breakpoint label : arrêt quand arrivée sur l'adresse pointée par le label
@@ -47,7 +47,7 @@ c.f. gdb
 - commands file : charge un fichier avec des commandes pour le débugger, à exécuter quand un breakpoint est atteint ou une instruction "catchée"
 
 
-# data
+## data
 
 - call function : appelle une fonction du programme
 - display register : affiche la valeur d'une registre
@@ -67,16 +67,16 @@ c.f. gdb
 - out port val : envoie la valeur val sur le port spécifié
 - in port : lis le port spcifié
 
-# files
+## files
 
 - file fichier (ou file codeObjet codeAssembleur si les symboles ne sont pas dans le
 	 fichier objet) : charge le fichier pour le débuggage
 - path chemin : ajout du chemin au path
 
-# internals
+## internals
 ras pour l'instant
 
-# 
+##
 - compare adresse offset fichier : compare le dump conservé dans fichier avec 
 le contenu de la mémoire [adresse, adresse + offset]
 - compare fichier : compare le dump des registres avec les valeurs de registre courant
@@ -87,7 +87,7 @@ le contenu de la mémoire [adresse, adresse + offset]
 - stop : arrêt du débuggage
 
 
-# running 
+## running 
 - continue : continue l'exécution
 - c : continue l'exécution
 - ctrl + c : met en pause l'exécution du programme 
@@ -111,14 +111,14 @@ le contenu de la mémoire [adresse, adresse + offset]
 	et le programme s'arrêtera au sortir de la boucle)
 
 
-# stack : inspection de la pile matérielle, et de la pile pointée par R31
+## stack : inspection de la pile matérielle, et de la pile pointée par R31
 - show stack n : affichage du contenu de la mémoire sur n octets à partir de l'adresse (faire une détection automatique de la pile d'appel ?)
 de début de pile
 - show callstack : afficher le contenu de la pile d'appel
 - ret : retourne immédiatement de l'appel (simule un ret)
 
 
-# status (peut-être changer les noms des watchpoints etc pour être consistant 
+## status (peut-être changer les noms des watchpoints etc pour être consistant 
 	avec gdb ?)
 - info breakpoints : infos sur les breakpoints
 - info watchpoints : infos sur les points de surveillance des I/O
@@ -129,7 +129,7 @@ de début de pile
 
 d'autres infos ? certainement !
 
-# support 
+## support 
 - ! commande : exécute une commande shell
 - help : affiche l'aide
 - h : idem
@@ -142,9 +142,9 @@ if end if else
 
 Sans doute.
 
-# tracepoints
+## tracepoints
 
-# timing
+## timing
 
 Ajout de timing : pour mesurer la durée d'exécution
 
