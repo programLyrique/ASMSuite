@@ -118,8 +118,7 @@ de début de pile
 - ret : retourne immédiatement de l'appel (simule un ret)
 
 
-## status (peut-être changer les noms des watchpoints etc pour être consistant 
-	avec gdb ?)
+## status (peut-être changer les noms des watchpoints etc pour être consistant avec gdb ?)
 - info breakpoints : infos sur les breakpoints
 - info watchpoints : infos sur les points de surveillance des I/O
 - info catchpoints : c.f. avant
