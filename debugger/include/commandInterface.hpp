@@ -5,11 +5,12 @@ namespace debugger
 {
 
 /**
- * L'interface par laquelle l'utilisateur interragit avec le debogueur.
+ * L'interface par laquelle l'utilisateur interagit avec le debogueur.
  */
 class CommandInterface
 {
-    virtual void prompt() = 0;
+    public:
+     virtual void prompt() = 0;
 };
 
 }
