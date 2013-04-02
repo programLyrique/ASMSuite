@@ -43,6 +43,11 @@ void Control_unit::read_registers ()
     registers -> read (r2, r3);
 }
 
+void Control_unit::write_registers ()
+{
+    registers -> write (r1);
+}
+
 void Control_unit::execute_ALU_op ()
 {
     if (im) {
@@ -54,14 +59,19 @@ void Control_unit::execute_ALU_op ()
 void Control_unit::execute_MEM_op ()
 {
     switch (op_code) {
-        case IN : data_memory -> load(); break;
-        case OUT : data_memory -> store(); break;
+        case LOAD : data_memory -> load(); break;
+        case STORE : data_memory -> store(); break;
         default : ;
     }
 }
 
 void Control_unit::execute_IO_op ()
 {
+    switch (op_code) {
+        case IN : io -> input(); break;
+        case OUT : io -> output(); break;
+        default : ;
+    }
 }
 
 void Control_unit::jump_instruction ()
@@ -86,8 +96,13 @@ void Control_unit::jump_instruction ()
     }
 }
 
-void Control_unit::write_registers ()
+void Control_unit::execute_program ()
 {
-    registers -> write (r1);
+    while (true) {
+        read_inst();
+        decode_inst();
+        execute_inst();
+    }
 }
+
 

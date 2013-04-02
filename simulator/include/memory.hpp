@@ -1,8 +1,8 @@
 #ifndef _MEMORY
 #define _MEMORY
 #include <cstdint>
-#define IN 0
-#define OUT 1
+#define LOAD 0
+#define STORE 1
 #define N 65536
 class Memory {
     private:

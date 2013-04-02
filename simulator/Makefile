@@ -24,9 +24,8 @@ main: $(OBJ)
 .PHONY: clean mrproper
 
 clean:
-	rm -rf $(SRC_DIR)/*.o
-	rm -rf $(ROOT_DIR)/screen.*.o
+	rm -f $(SRC_DIR)/*.o
 
 mrproper: clean
-	rm -rf $(OUT_DIR)/$(EXEC)
+	rm -f $(OUT_DIR)/$(EXEC)
 

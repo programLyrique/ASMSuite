@@ -1,6 +1,7 @@
 #ifndef _CONTROL_UNIT
 #define _CONTROL_UNIT
 #include <cstdint>
+#include "io.hpp"
 #include "alu.hpp"
 #include "registers.hpp"
 #include "memory.hpp"
@@ -43,6 +44,7 @@ class Control_unit {
         Memory* data_memory;
         Memory* program_memory;
         Registers* registers;
+        IO* io;
 
         int32_t type_inst;
         int32_t op_code;
@@ -54,6 +56,7 @@ class Control_unit {
         void read_inst ();
         void decode_inst ();
         void execute_inst ();
+
         void read_registers ();
         void jump_instruction ();
         void execute_ALU_op ();
@@ -69,7 +72,7 @@ class Control_unit {
         Control_unit (int32_t* _pc, int32_t* _inst, int32_t* _imm_bus,
                       bool* _flag_z, bool* _flag_p, bool* _flag_n,
                       ALU* _alu, Memory* _data_memory, 
-                      Memory* _program_memory, Registers* _registers)
+                      Memory* _program_memory, Registers* _registers, IO* _io)
         {
             pc = _pc;
             inst = _inst;
@@ -81,7 +84,9 @@ class Control_unit {
             data_memory = _data_memory;
             program_memory = _program_memory;
             registers = _registers;
+            io = _io;
         }
+        void execute_program ();
 };
 #endif
 

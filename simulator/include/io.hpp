@@ -2,6 +2,8 @@
 #define _IO
 #include <cstdint>
 #include <cstdio>
+#define IN 0
+#define OUT 1
 
 class IO {
     private:
