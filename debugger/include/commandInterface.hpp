@@ -9,7 +9,7 @@ namespace debugger
  */
 class CommandInterface
 {
-    virtual 
+    virtual void prompt() = 0;
 };
 
 }
