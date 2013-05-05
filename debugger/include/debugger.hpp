@@ -1,16 +1,14 @@
 #ifndef DEBUGGER_H
 #define DEBUGGER_H
 
+
+#include <vector>
+
 #include "commandInterface.hpp"
+#include "breakpoint.hpp"
 
 namespace debugger
 {
-
-//enum
-//{
-//
-//};
-
 
 class Simulator;
 
@@ -19,6 +17,8 @@ class Simulator;
  *
  * Il faut « attacher » un debugger à un simulateur via la méthode
  * attach du simulateur.
+ * \todo laisser charger un fichier qui contienne des commandes pour le debugger
+ * à exécuter à chaque breakpoint
  */
 class Debugger
 {
@@ -27,6 +27,8 @@ class Debugger
     Simulator* sim;
 
     CommandInterface& interf;
+    
+    vector<Breakpoint> breakpoints;
 
     public:
     /**

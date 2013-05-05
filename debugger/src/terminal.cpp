@@ -12,6 +12,8 @@ namespace debugger
     void Terminal::prompt()
     {
         cout << "> " << flush;
+        string in;
+        getline(cin, in); // on lit l'entrée
     }
 
     /**
@@ -26,6 +28,11 @@ namespace debugger
          back_inserter<vector<string> >(tokens));
 
          return tokens;
+    }
+    
+    void Terminal::analyseTokens(vector<string> tokens)
+    {
+        
     }
 
 }
