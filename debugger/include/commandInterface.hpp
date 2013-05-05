@@ -1,4 +1,4 @@
-#ifdef COMMAND_INTERFACE_H
+#ifndef COMMAND_INTERFACE_H
 #define COMMAND_INTERFACE_H
 
 namespace debugger
@@ -11,8 +11,12 @@ class CommandInterface
 {
     public:
      virtual void prompt() = 0;
+     
+     virtual ~CommandInterface(){}
+     
 };
 
 }
 
-#define COMMAND_INTERFACE_H
+#endif
+

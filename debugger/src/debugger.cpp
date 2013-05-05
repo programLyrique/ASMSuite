@@ -3,12 +3,12 @@
 namespace debugger
 {
 
-Debugger::debugger(CommandInterface& inter) : interf(inter)
+Debugger::Debugger(CommandInterface& inter) : interf(inter)
 {
 
 }
 
-boolean Debugger::interact()
+bool Debugger::interact()
 {
 
 }
