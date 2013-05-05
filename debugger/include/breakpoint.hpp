@@ -19,11 +19,6 @@ namespace debugger
     {
     public:
         /**
-         * Breakpoint sur un label
-         * @param label
-         */
-        Breakpoint(string label);
-        /**
          * Breakpoint sur une adresse mémoire
          * @param orig
          */
