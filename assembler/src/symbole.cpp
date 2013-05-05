@@ -3,7 +3,7 @@
 
 Hashtable Symbole::hash = Hashtable();
 
-Symbole::Symbole(wchar_t *name) : e(hash.Add(name)) {}
+Symbole::Symbole(const wchar_t *name) : e(hash.Add(name)) {}
 
 void Symbole::SetValue(unsigned int n) {
   e->value = n;
@@ -14,7 +14,7 @@ unsigned int Symbole::GetValue() {
   return e->value;
 }
 
-wchar_t* Symbole::GetText() {
+const wchar_t* Symbole::GetText() {
   return e->name;
 }
 

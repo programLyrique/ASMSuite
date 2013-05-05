@@ -19,12 +19,13 @@ public :
   void SetImm(int index, Arbre* imm); // la index-ième opérande est un immédiat de valeur imm.
   void SetSuiv(Liste* suiv);
 
-  bool getType(int index);
-  unsigned int getReg(int index);
-  Arbre* getImm(int index);
+  unsigned int GetInstr();
+  bool GetType(int index);
+  unsigned int GetReg(int index);
+  Arbre* GetImm(int index);
   Liste* GetSuiv();
 
-  ~Liste() { delete suiv; }
+  ~Liste();
 
 };
 
