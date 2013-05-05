@@ -19,11 +19,6 @@ namespace debugger
     {
     public:
         /**
-         * breakpoint sur une ligne (numéro => program counter)
-         * @param pc
-         */
-        Breakpoint(int line);
-        /**
          * Breakpoint sur un label
          * @param label
          */
@@ -60,12 +55,10 @@ namespace debugger
         Breakpoint(const Breakpoint& orig);
         
         /**
-         * Une série de commandes du debugger à exécuter à chaque breakpoint.
-         * 
-         * @param file fichier où se trouvent les commandes
+         * Renvoie vrai s'il faut s'arrêter
+         * @return 
          */
-        void setCommands(string file);
-
+        virtual bool isBreak() = 0;
 
         virtual ~Breakpoint();
     private:
