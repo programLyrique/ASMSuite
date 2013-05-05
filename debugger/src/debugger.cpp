@@ -3,14 +3,28 @@
 namespace debugger
 {
 
-Debugger::debugger(CommandInterface& inter) : interf(inter)
+Debugger::Debugger(CommandInterface& inter) : interf(inter)
 {
 
 }
 
-boolean Debugger::interact()
+bool Debugger::interact()
 {
-
+    //Point d'arrêt ?
+    bool breaks;
+    for(int i = 0; i < breakpoints.size() ; i++)
+    {
+        if(breakpoints[i].isBreak())
+        {
+            breaks = true;
+            break;
+        }
+    }
+    if(breaks)
+    {
+        //On affiche l'invite pour rentrer une commande de debogage
+        interf.prompt();
+    }
 }
 
 }
