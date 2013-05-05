@@ -6,6 +6,7 @@
 #include "syntaxe.hpp"
 
 Arbre* Syntaxe::nb() {
+
   Arbre *a;
   switch (lex.GetId()) {
   case PGAUCHE :
@@ -23,11 +24,20 @@ Arbre* Syntaxe::nb() {
       // ERREUR
       std::wcout << "Erreur : id dans data.\n" << std::endl;
     }
-  case NOMBRE :
-    a = new Arbre(lex.GetId(), lex.GetIdbis(), lex.GetLine(), lex.GetColumn());
+    a = new Arbre(ID, 0, lex.GetLine(), lex.GetColumn());
+    a->SetSymbole(lex.GetSymb());
     lex.Read();
     break;
-
+  case NOMBRE :
+    a = new Arbre(NOMBRE, lex.GetIdbis(), lex.GetLine(), lex.GetColumn());
+    lex.Read();
+    break;
+    
+  case MOINS:
+    a = new Arbre(MOINS, 0, lex.GetLine(), lex.GetColumn());
+    lex.Read();
+    a->SetFilsGauche(fm());
+    break;
   default :
     std::wcout << "Erreur : nb attendu.\n" << std::endl;    
   }
@@ -35,6 +45,7 @@ Arbre* Syntaxe::nb() {
 }
 
 Arbre* Syntaxe::e() {
+
   Arbre* fg = nb();
   Arbre* fd;
   Arbre* a;
@@ -57,20 +68,45 @@ Arbre* Syntaxe::e() {
   return a;
 }
 
-Arbre* Syntaxe::fdm() {
+Arbre* Syntaxe::d() {
+
   Arbre* fg = e();
   Arbre* fd;
   Arbre* a;
   unsigned int l, c;
   switch (lex.GetId()) {
-  case FOIS :
   case DIV :
-  case MODULO :
     l = lex.GetLine();
     c = lex.GetColumn();
     lex.Read();
-    fd = fdm();
-    a = new Arbre(lex.GetId(), 0, l, c);
+    fd = fm();
+    a = new Arbre(DIV, 0, l, c);
+    a->SetFilsGauche(fg);
+    a->SetFilsDroit(fd);
+    break;
+
+  default:
+    // cas epsilon
+    a = fg;
+  }
+  return a;
+}
+
+Arbre* Syntaxe::fm() {
+
+  Arbre* fg = d();
+  Arbre* fd;
+  Arbre* a;
+  unsigned int i, l, c;
+  switch (lex.GetId()) {
+  case FOIS :
+  case MODULO :
+    i = lex.GetId();
+    l = lex.GetLine();
+    c = lex.GetColumn();
+    lex.Read();
+    fd = fm();
+    a = new Arbre(i, 0, l, c);
     a->SetFilsGauche(fg);
     a->SetFilsDroit(fd);
     break;
@@ -84,18 +120,18 @@ Arbre* Syntaxe::fdm() {
 
 Arbre* Syntaxe::expression() {
   // PLUS, MOINS > FOIS, DIV, MODULO > EXP
-  Arbre* fg = fdm();
+  Arbre* fg = fm();
   Arbre* fd;
   Arbre* a;
   unsigned int l, c;
   switch (lex.GetId()) {
   case PLUS :
+    lex.Read();
   case MOINS :
     l = lex.GetLine();
     c = lex.GetColumn();
-    lex.Read();
     fd = expression();
-    a = new Arbre(lex.GetId(), 0, l, c);
+    a = new Arbre(PLUS, 0, l, c);
     a->SetFilsGauche(fg);
     a->SetFilsDroit(fd);
     break;
@@ -123,7 +159,7 @@ void Syntaxe::lignescode() {
     s = lex.GetSymb();
     if (s.GetInit()) {
       // Erreur : symbole déjà rencontré
-      std::wcout << "Erreur : symbole code.\n" << std::endl;
+      std::wcout << "Erreur : symbole code : " << s.GetText() << " " << s.GetValue() << std::endl;
     } else s.SetValue(cCode);
     lex.Read();
     if (lex.GetId() != DEUX_POINTS) {
@@ -135,6 +171,7 @@ void Syntaxe::lignescode() {
     break;
   
   case INSTR :
+
     // MAJ de la pile d'instructions.
     *lCurrent = Liste(lex.GetIdbis(), lex.GetLine());
     lex.Read();
@@ -148,10 +185,10 @@ void Syntaxe::lignescode() {
       t = lex.GetId();
       if (t == REGISTRE) {
 	lCurrent->SetReg(i, lex.GetIdbis());
+	lex.Read();
       } else if (t == PGAUCHE || t == ID || t == NOMBRE) {
 	lCurrent->SetImm(i, expression());
       } else if (t == FIN_LIGNE) break;
-      lex.Read();
     }
     l = new Liste(0,0);
     lCurrent->SetSuiv(l);
@@ -159,8 +196,10 @@ void Syntaxe::lignescode() {
     cCode++;
     if (lex.GetId() != FIN_LIGNE) {
       // ERREUR
+      std::wcout << L"Erreur Finligne" << std::endl;
     }
     lex.Read();
+    lignescode();
     break;
 
   default:
@@ -245,7 +284,7 @@ void Syntaxe::codesource() {
     codesource();
     break;
 
-  case EOF :
+  case E_O_F :
     break;
 
   default: // ERREUR
@@ -256,9 +295,11 @@ void Syntaxe::codesource() {
 int Syntaxe::UAL(int instr) {
   if (!(lCurrent->GetType(0))) {
     // ERREUR
+	std::wcout << L"Erreur" << std::endl;
   }
   if (!(lCurrent->GetType(1))) {
     // ERREUR
+	std::wcout << L"Erreur" << std::endl;
   }
   if (!(lCurrent->GetType(2))) {
     // WARNING
@@ -274,14 +315,20 @@ int Syntaxe::UAL(int instr) {
 int Syntaxe::UALi(int instr) {
   if (!(lCurrent->GetType(0))) {
     // ERREUR
+	std::wcout << L"Erreur" << std::endl;
   }
   if (!(lCurrent->GetType(1))) {
     // ERREUR
+	std::wcout << L"Erreur" << std::endl;
   }
   if (lCurrent->GetType(2)) {
     // WARNING
     instr -= 1 << 26;
     return UAL(instr);
+  }
+  if (lCurrent->GetImm(2)->GetType() == UNDEFINED) {
+    // ERREUR
+    std::cout << "ERREUR" << std::endl;
   }
   instr += lCurrent->GetReg(0) << 21;
   instr += lCurrent->GetReg(1) << 16;
@@ -292,6 +339,11 @@ int Syntaxe::UALi(int instr) {
 int Syntaxe::CallJmp(int instr) {
   if (lCurrent->GetType(0)) {
     // ERREUR
+	std::wcout << L"Erreur" << std::endl;
+  }
+  if (lCurrent->GetImm(0)->GetType() == UNDEFINED) {
+    // ERREUR
+    std::cout << "ERREUR" << std::endl;
   }
   instr += lCurrent->GetImm(0)->GetValue() & 0x7FFFFFF;
   return instr;
@@ -300,16 +352,23 @@ int Syntaxe::CallJmp(int instr) {
 int Syntaxe::Jr(int instr) {
   if (!(lCurrent->GetType(0))) {
     // ERREUR
+	std::wcout << L"Erreur" << std::endl;
   }
   if (!(lCurrent->GetType(1))) {
     // ERREUR
+	std::wcout << L"Erreur" << std::endl;
   }
   if (lCurrent->GetType(2)) {
     // ERREUR
+	std::wcout << L"Erreur" << std::endl;
+  }
+  if (lCurrent->GetImm(2)->GetType() == UNDEFINED) {
+    // ERREUR
+    std::cout << "ERREUR" << std::endl;
   }
   instr += lCurrent->GetReg(0) << 16;
   instr += lCurrent->GetReg(1) << 11;
-  instr += lCurrent->GetImm(0)->GetValue() & 0x7FF;
+  instr += lCurrent->GetImm(2)->GetValue() & 0x7FF;
   return instr;  
 }
 
@@ -324,60 +383,74 @@ int Syntaxe::Read(FILE *in, std::ofstream *out) {
   int nb_op;
   int i;
 
-  // TODO : analyse sémantique
+  codesource();
+
+  // analyse sémantique
   lCurrent = &lCode;
   while (lCurrent->GetSuiv() != 0) {
     nb_op = 3;
     for (i = 0; i < 3; i++) {
       if (!(lCurrent->GetType(i)) && lCurrent->GetImm(i)) { // si la ième opérande est un arbre non vide
-	(lCurrent->GetImm(i))->Evaluate();
+	lCurrent->GetImm(i)->Evaluate();
       }
-      if (!(lCurrent->GetType(i) || lCurrent->GetImm(i))) nb_op = i;
+      if (!(lCurrent->GetType(i) || lCurrent->GetImm(i))) {
+	nb_op = i;
+	break;
+      }
     }
     instr = 0;
     switch (lCurrent->GetInstr()) {
     case ADD:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur : ADD a 3 opérandes" << std::endl;
       }
       instr = UAL(0);
       break;
     case ADDI:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur : ADDi a 3 opérandes" << std::endl;
       }
       instr = UALi(1 << 26);
       break;
     case AND:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur : AND a 3 opérandes" << std::endl;
       }
       instr = UAL(4 << 26);
       break;
     case ANDI:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur : ANDi a 3 opérandes" << std::endl;
       }
       instr = UALi(5 << 26);
       break;
     case CALL:
       if (nb_op != 1) {
 	// ERREUR
+	std::wcout << L"Erreur : CALL a 1 opérande" << std::endl;
       }
       instr = CallJmp(52 << 26);
       break;
     case IN:
       if (nb_op != 2) {
 	// ERREUR
+	std::wcout << L"Erreur : IN a 2 opérandes" << std::endl;
       }
       if (!(lCurrent->GetType(0))) {
 	// ERREUR
+	std::wcout << L"Erreur 0" << std::endl;
       }
       if (lCurrent->GetType(1)) {
 	// ERREUR
+	std::wcout << L"Erreur 1" << std::endl;
       }
-      if (lCurrent->GetImm(1)->GetType() != NOMBRE) {
+      if (lCurrent->GetImm(1)->GetType() == UNDEFINED) {
 	// ERREUR
+	std::wcout << L"Erreur calcul 1 : " << std::endl;
       }
       instr = 32 << 26;
       instr += lCurrent->GetReg(0) << 21;
@@ -386,15 +459,18 @@ int Syntaxe::Read(FILE *in, std::ofstream *out) {
     case JMP:
       if (nb_op != 1) {
 	// ERREUR
+	std::wcout << L"Erreur : JMP a une opérande" << std::endl;
       }
       instr = CallJmp(48 << 26);
       break;
     case JMR:
       if (nb_op != 1) {
 	// ERREUR
+	std::wcout << L"Erreur : JMR a une opérande" << std::endl;
       }
-      if (lCurrent->GetType(0)) {
+      if (!lCurrent->GetType(0)) {
 	// ERREUR
+	std::wcout << L"Erreur 0" << std::endl;
       }
       instr = 58 << 26;
       instr += lCurrent->GetReg(0) << 16;
@@ -402,24 +478,29 @@ int Syntaxe::Read(FILE *in, std::ofstream *out) {
     case JRE:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur : JRE a une opérande" << std::endl;
       }
       instr = Jr(57 << 26);
       break;
     case JRS:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       instr = Jr(59 << 26);
       break;
     case LOAD:
       if (nb_op != 2) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       if (!lCurrent->GetType(0)) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       if (!lCurrent->GetType(1)) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       instr = 16 << 26;
       instr += lCurrent->GetReg(0) << 21;
@@ -428,26 +509,32 @@ int Syntaxe::Read(FILE *in, std::ofstream *out) {
     case OR:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       instr = UAL(6 << 26);
       break;
     case ORI:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       instr = UALi(7 << 26);
       break;
     case OUT:
       if (nb_op != 2) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       if (lCurrent->GetType(0)) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       if (!lCurrent->GetType(1)) {
+	std::wcout << L"Erreur" << std::endl;
 	// ERREUR
       }
-      if (lCurrent->GetImm(0)->GetType() != NOMBRE) {
+      if (lCurrent->GetImm(0)->GetType() == UNDEFINED) {
+	std::wcout << L"Erreur" << std::endl;
 	// ERREUR
       }
       instr = 34 << 26;
@@ -456,6 +543,7 @@ int Syntaxe::Read(FILE *in, std::ofstream *out) {
       break;
     case RET:
       if (nb_op != 0) {
+	std::wcout << L"Erreur" << std::endl;
 	// ERREUR
       }
       instr = 54 << 26;
@@ -463,36 +551,43 @@ int Syntaxe::Read(FILE *in, std::ofstream *out) {
     case SL:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       instr = UAL(12 << 26);
       break;
     case SLI:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       instr = UALi(13 << 26);
       break;
     case SR:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       instr = UAL(10 << 26);
       break;
     case SRI:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       instr = UALi(11 << 26);
       break;
     case STORE:
       if (nb_op != 2) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       if (!lCurrent->GetType(0)) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       if (!lCurrent->GetType(1)) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       instr = 17 << 26;
       instr += lCurrent->GetReg(0) << 11;
@@ -501,24 +596,28 @@ int Syntaxe::Read(FILE *in, std::ofstream *out) {
     case SUB:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       instr = UAL(2 << 26);
       break;
     case SUBI:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       instr = UALi(3 << 26);
       break;
     case XOR:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       instr = UAL(8 << 26);
       break;
     case XORI:
       if (nb_op != 3) {
 	// ERREUR
+	std::wcout << L"Erreur" << std::endl;
       }
       instr = UALi(9 << 26);
       break;

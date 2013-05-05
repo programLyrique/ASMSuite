@@ -86,9 +86,12 @@ wchar_t Lecture::GetNextChar() {
   return c;
 }
 
-const wchar_t *Lecture::GetString() {
-  id.erase(id.length()-1); // supprime le dernier caractère (lu en trop)
-  return id.c_str();
+wchar_t *Lecture::GetString() {
+  wchar_t* ch = new wchar_t[id.length()];
+  for (int i = 0; i < (int) id.length()-1; i++)
+    ch[i] = id[i];
+  ch[id.length()-1] = 0;
+  return ch;
 }
 
 void Lecture::newToken() {

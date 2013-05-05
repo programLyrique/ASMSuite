@@ -18,7 +18,8 @@ private :
 
   Arbre *nb(); // fonctions intermédiaires
   Arbre *e();
-  Arbre *fdm();
+  Arbre *d();
+  Arbre *fm();
   Arbre *expression(); // transforme une expression en arbre
 
   void lignecode();
