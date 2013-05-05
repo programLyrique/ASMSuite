@@ -19,15 +19,19 @@ void Liste::SetSuiv(Liste* s) {
   suiv = s;
 }
 
-bool Liste::getType(int index) {
+unsigned int Liste::GetInstr() {
+  return instr;
+}
+
+bool Liste::GetType(int index) {
   return isReg[index];
 }
 
-unsigned int Liste::getReg(int index) {
+unsigned int Liste::GetReg(int index) {
   return reg[index];
 }
 
-Arbre* Liste::getImm(int index) {
+Arbre* Liste::GetImm(int index) {
   return imm[index];
 }
 
@@ -38,5 +42,5 @@ Liste* Liste::GetSuiv() {
 Liste::~Liste() {
   delete suiv;
   for (int i = 0; i < 3; i++)
-    if (Arbre[i]) delete Arbre[i];
+    if (imm[i]) delete imm[i];
 }

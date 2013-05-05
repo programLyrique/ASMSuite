@@ -1,7 +1,7 @@
 #include "hashtable.hpp"
 #define NULL 0
 
-inline bool neq(wchar_t *a, wchar_t *b) { // = (a != b) dans l'ordre lexicographique.
+inline bool neq(const wchar_t *a, const wchar_t *b) { // = (a != b) dans l'ordre lexicographique.
   int i = 0;
 
   while ((a[i] == b[i]) && (a[i] != 0)) i++;
@@ -9,7 +9,7 @@ inline bool neq(wchar_t *a, wchar_t *b) { // = (a != b) dans l'ordre lexicograph
   return (a[i] != b[i]);
 }
 
-inline bool inf(wchar_t *a, wchar_t *b) { // = (a < b) dans l'ordre lexicographique.
+inline bool inf(const wchar_t *a, const wchar_t *b) { // = (a < b) dans l'ordre lexicographique.
   int i = 0;
 
   while ((a[i] == b[i]) && (a[i] != 0)) i++;
@@ -17,7 +17,7 @@ inline bool inf(wchar_t *a, wchar_t *b) { // = (a < b) dans l'ordre lexicographi
   return (a[i] < b[i]);
 }
 
-elem* Hashtable::Add(wchar_t *n) {
+elem* Hashtable::Add(const wchar_t *n) {
   int t = n[0];
   elem *e,*f,*g;
 
@@ -44,7 +44,7 @@ elem* Hashtable::Add(wchar_t *n) {
     f->suiv = g;
   }
   else {
-    delete[] g->name;
+    //delete[] g->name;
     delete g; // cas où l'élément existe déjà.
     g = f;
   }
@@ -60,7 +60,7 @@ Hashtable::~Hashtable() {
     e = tab[i];
     while (e != NULL) {
       f = e->suiv;
-      delete[] e->name;
+      //delete[] e->name;
       delete e;
       e = f;
     }

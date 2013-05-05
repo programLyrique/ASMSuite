@@ -11,10 +11,10 @@ private :
 
 public :
   Symbole() : e(0) {} // renvoit un symbole vide.
-  Symbole(wchar_t *name); // crée un nouveau symbole, ou renvoie celui pré-existant. name ne DOIT pas être volatile.
+  Symbole(const wchar_t *name); // crée un nouveau symbole, ou renvoie celui pré-existant. name ne DOIT pas être volatile.
   void SetValue(unsigned int n);
   unsigned int GetValue();
-  wchar_t* GetText();
+  const wchar_t* GetText();
   bool GetInit();
 
 };

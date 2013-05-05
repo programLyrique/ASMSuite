@@ -2,7 +2,7 @@
 #define HASHTABLE_HPP
 
 struct elem {
-  wchar_t *name;
+  const wchar_t *name;
   unsigned int value;
   bool init;
   elem* suiv;
@@ -15,7 +15,7 @@ private :
 public :
   Hashtable() { int i; for(i = 0; i < 26*2; i++) tab[i] = 0; } // initialise la table de hachage.
   
-  elem* Add(wchar_t *n); // IMPORTANT : la chaine mise en entrée est supposée non "volatile" : seul Hashtable peut la détruire.
+  elem* Add(const wchar_t *n); // IMPORTANT : la chaine mise en entrée est supposée non "volatile" : seul Hashtable peut la détruire.
   
   ~Hashtable(); // détruit toutes les chaines de caractères et tous les symboles.
 };

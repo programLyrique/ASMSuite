@@ -2,29 +2,40 @@
 #include <iostream>
 #include <fstream>
 #include <cwchar>
+#include <cstdio>
 
-Lecture::Lecture(const char *filename) {
-  file.open(filename); // ouvre le fichier en lecture.
+Lecture::Lecture(FILE* f) {
+  //file->open(filename); // ouvre le fichier en lecture.
+  file = f;
   buffer = new wchar_t[SIZE_BUF]; // alloue le buffer
-  id.txt = new wchar_t[SIZE_BUF]; // alloue un tampon pour sauvegarder le lexème courant.
-  id.suiv = 0;
-  id_courant = &id;
-  nb_longstring = 0;
-  taille_id_courant = 0;
   pointer = 0;
   line = 1;
   column = 0;
   
   // lit dans le buffer.
-  file.get(buffer, SIZE_BUF, L'\0'); // est-ce que le délimiteur est correct ?
+  //file->get(buffer, SIZE_BUF, WEOF); // est-ce que le délimiteur est correct ?
+  //file->read(buffer, SIZE_BUF);
+  //std::cout << file->gcount() << std::endl;
   //fread(buffer, sizeof(wchar_t), SIZE_BUF, file); // à peut-être remplacer par une boucle de fwgetc
+  for (int i = 0; i < SIZE_BUF; i++) {
+    buffer[i] = fgetwc(file);
+    //std::wcout << buffer[i];
+    if (buffer[i] == WEOF) buffer[i] = 0;
+  }
+  GetNextChar(); // met à jour charcur.
 }
 
 inline void Lecture::IncPointer() {
   column++;
   if (++pointer == SIZE_BUF) {
+    for (int i = 0; i < SIZE_BUF; i++) {
+      buffer[i] = fgetwc(file);
+      //std::wcout << buffer[i];
+      if (buffer[i] == WEOF) buffer[i] = 0;
+    }
     //fread(buffer, sizeof(wchar_t), SIZE_BUF, file); // peut-être non sûr.
-    file.get(buffer, SIZE_BUF, L'\0');
+    //file->get(buffer, SIZE_BUF, L'\0');
+    //file->read(buffer, SIZE_BUF);
     pointer = 0;
   }
 }
@@ -70,72 +81,28 @@ wchar_t Lecture::GetNextChar() {
     column = 0;
   }
   // copie le caractère dans id_courant
-  id_courant->txt[taille_id_courant] = c;
-  if (++taille_id_courant == SIZE_BUF) {
-    longstring *s = new longstring;
-    s->txt = new wchar_t[SIZE_BUF];
-    s->suiv = 0;
-    id_courant->suiv = s;
-    id_courant = s;
-    nb_longstring++;
-    taille_id_courant = 0;
-  }
+  id += c;
+  charcur = c;
   return c;
 }
 
-wchar_t *Lecture::GetString() {
-  unsigned int t = nb_longstring*SIZE_BUF+taille_id_courant;
-  wchar_t *res = new wchar_t[t];
-  longstring *a = &id;
-  unsigned int i;
-  for (i = 0; i < nb_longstring; i++) {
-    wmemcpy(&(res[i*SIZE_BUF]), a->txt, SIZE_BUF); // copie les chaines.
-    a = a->suiv;
-  }
-  wmemcpy(&(res[i*SIZE_BUF]), a->txt, t % SIZE_BUF);
-  res[t-1] = L'\0'; // le dernier caractère lu est rejeté, car il indique la fin du lexème.
+const wchar_t *Lecture::GetString() {
+  id.erase(id.length()-1); // supprime le dernier caractère (lu en trop)
+  return id.c_str();
 }
 
 void Lecture::newToken() {
-  longstring *a, *b;
-  a = id.suiv;
-  while (a != 0) {
-    b = a->suiv;
-    delete a->txt;
-    delete a;
-    a = b;
-  }
-  id.suiv = 0;
-  id_courant = &id;
-  nb_longstring = 0;
-  taille_id_courant = 0;
   // saute les espaces et les tabulations.
   wchar_t c;
   c = GetChar();
   while ((c == L' ') || (c == L'\t')) {
-    IncPointer();
-    c = GetChar();
-  }
-}
-
-wchar_t Lecture::Error() {
-  wchar_t c;
-  do {
     c = GetNextChar();
-  } while ((c != L'\n') && (c != L'\0'));
-  return c;
+  }
+  id.clear();
+  id += GetChar();
 }
 
 Lecture::~Lecture() {
-  file.close();
+  //file->close(); // ou alors déléguer cela au main ?
   delete buffer;
-  delete id.txt;
-  longstring *a, *b;
-  a = id.suiv;
-  while (a != 0) {
-    b = a->suiv;
-    delete a->txt;
-    delete a;
-    a = b;
-  }
 }
