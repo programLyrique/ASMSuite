@@ -10,7 +10,7 @@
 namespace debugger
 {
 
-    IOBreakpoint::IOBreakpoint(int port, Type type, int val) : port(port), type(type), val(val)
+    IOBreakpoint::IOBreakpoint(int port, IOBreakpoint::Type type, int val) : port(port), type(type), val(val)
     {
     }
 

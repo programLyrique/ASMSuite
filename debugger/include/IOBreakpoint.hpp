@@ -26,10 +26,6 @@ namespace debugger
     class IOBreakpoint : public Breakpoint
     {
     public:
-        IOBreakpoint(int port, Type type = IO, int val = 0);
-        IOBreakpoint(const IOBreakpoint& orig);
-        bool isBreak();
-        virtual ~IOBreakpoint();
 
         enum Type
         {
@@ -40,6 +36,11 @@ namespace debugger
             INVAL,
             OUTVAL
         };
+        IOBreakpoint(int port, IOBreakpoint::Type type = IO, int val = 0);
+        IOBreakpoint(const IOBreakpoint& orig);
+        bool isBreak();
+        virtual ~IOBreakpoint();
+
     private:
         int port;
         Type type;
