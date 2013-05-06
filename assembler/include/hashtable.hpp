@@ -16,6 +16,8 @@ public :
   Hashtable() { int i; for(i = 0; i < 26*2; i++) tab[i] = 0; } // initialise la table de hachage.
   
   elem* Add(wchar_t *n); // IMPORTANT : la chaine mise en entrée est supposée non "volatile" : seul Hashtable peut la détruire.
+
+  void File(const char* filename);
   
   ~Hashtable(); // détruit toutes les chaines de caractères et tous les symboles.
 };

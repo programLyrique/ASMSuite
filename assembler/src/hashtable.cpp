@@ -1,5 +1,8 @@
 #include "hashtable.hpp"
-#define NULL 0
+#include <cstdlib>
+#include <fstream>
+#include <cwchar>
+//#define NULL 0
 
 inline bool neq(wchar_t *a, wchar_t *b) { // = (a != b) dans l'ordre lexicographique.
   int i = 0;
@@ -56,6 +59,7 @@ Hashtable::~Hashtable() {
   int i;
   elem *e,*f;
   
+  File("a.log");
   for (i = 0; i < 26*2; i++) {
     e = tab[i];
     while (e != NULL) {
@@ -63,6 +67,28 @@ Hashtable::~Hashtable() {
       delete[] e->name;
       delete e;
       e = f;
+    }
+  }
+}
+
+void Hashtable::File(const char* file) {
+  std::ofstream out;
+  elem *e, *f;
+  char* c;
+
+  out.open(file, std::ios::out);
+  for (int i = 0; i < 26*2; i++) {
+    e = tab[i];
+    f = NULL;
+    while (e != NULL) {
+      if (e->init) { // e a une valeur.
+	c = new char[wcslen(e->name)+1];
+	wcstombs(c, e->name, wcslen(e->name)+1);
+	out << c << " " << (e->value) << std::endl;
+	delete c;
+      }
+      f = e;
+      e = f->suiv;
     }
   }
 }
