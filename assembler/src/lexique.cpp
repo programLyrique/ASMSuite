@@ -9,6 +9,10 @@ void UniLex::SetFichier(FILE *f) {
   fichier = new Lecture(f);
 }
 
+void UniLex::DeleteFichier() {
+  delete fichier;
+}
+
 bool UniLex::CaracId(wchar_t c) {
   if (c == L'_') return true;
   else if ((c >= L'0') && (c <= L'9')) return true;

@@ -760,5 +760,6 @@ int Syntaxe::Read(FILE *in, std::ofstream *out) {
   }
   out->close();
   fclose(in);
+  UniLex::DeleteFichier();
   return 0;
 }
