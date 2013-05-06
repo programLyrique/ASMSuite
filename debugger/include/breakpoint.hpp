@@ -15,6 +15,17 @@ using namespace std;
 namespace debugger
 {
 
+    namespace breakpoint
+    {
+        enum Breakpoint_t
+        {
+            LINE,
+            LABEL,
+            INSTR,
+            PORT,
+            ADR
+        };
+    }
     class Breakpoint
     {
     public:
@@ -25,7 +36,7 @@ namespace debugger
          */
         virtual bool isBreak() = 0;
 
-        virtual ~Breakpoint(){}
+        virtual ~Breakpoint() {};
     private:
 
     };

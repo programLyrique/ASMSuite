@@ -13,6 +13,19 @@
 
 namespace debugger
 {
+    namespace io_breakpoint
+    {
+
+        enum Type
+        {
+            IO,
+            IN,
+            OUT,
+            IOVAl,
+            INVAL,
+            OUTVAL
+        };
+    }
 
     /**
      * Point d'arrêt sur un port I/O : quand il y a lecture ou écriture
@@ -27,23 +40,14 @@ namespace debugger
     {
     public:
 
-        enum Type
-        {
-            IO,
-            IN,
-            OUT,
-            IOVAl,
-            INVAL,
-            OUTVAL
-        };
-        IOBreakpoint(int port, IOBreakpoint::Type type = IO, int val = 0);
+        IOBreakpoint(int port, io_breakpoint::Type type = io_breakpoint::IO, int val = 0);
         IOBreakpoint(const IOBreakpoint& orig);
         bool isBreak();
         virtual ~IOBreakpoint();
 
     private:
         int port;
-        Type type;
+        io_breakpoint::Type type;
         int val;
 
     };

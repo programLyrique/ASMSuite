@@ -3,6 +3,9 @@
 
 
 #include <vector>
+#include <unordered_map>
+#include <stdexcept>   
+#include <sstream>
 
 #include "command.hpp"
 #include "commandInterface.hpp"
@@ -32,12 +35,14 @@ namespace debugger
 
         vector<Breakpoint*> breakpoints;
         
+        unordered_map<string, breakpoint::Breakpoint_t> break_commands;
+        
         /**
          * Etudie les arguments pour créer le bon type de breakpoints
          * @param args
          * @return null if the breakpoint is invalid
          */
-        Breakpoint* addBreakpoint(vector<string> args);
+        Breakpoint* addBreakpoint(const vector<string>& args);
 
     public:
         /**
@@ -60,9 +65,7 @@ namespace debugger
          */
         bool interact();
 
-        virtual ~Debugger()
-        {
-        }
+        virtual ~Debugger();
 
     };
 

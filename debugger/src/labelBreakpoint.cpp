@@ -20,7 +20,7 @@ namespace debugger
     
     bool LabelBreakpoint::isBreak()
     {
-        
+        return true;
     }
 
     LabelBreakpoint::~LabelBreakpoint()
