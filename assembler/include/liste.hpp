@@ -19,6 +19,7 @@ public :
   void SetImm(int index, Arbre* imm); // la index-ième opérande est un immédiat de valeur imm.
   void SetSuiv(Liste* suiv);
 
+  unsigned int GetLine() { return line; }
   unsigned int GetInstr();
   bool GetType(int index);
   unsigned int GetReg(int index);

@@ -1,3 +1,5 @@
+Usage du compilateur : ./main code_source code_binaire
+
 Le langage est insensible à la casse, sauf pour les noms de labels (définis par l'utilisateur).
 Les commentaires sont sensables à ceux du C.
 Les expressions arithmétiques acceptent les opérateurs suivants : +*/- ^(exponentielle) %(modulo), ainsi que des parenthèses.
@@ -22,8 +24,8 @@ on écrit une instruction par ligne. Les opérandes peuvent être séparées par
 Exemple :
 .CODE
 start :	add r0 r0 r0
-      	andi r1,r2,r3
-label:	sub r1 r2 5	// déclenche un avertissement, pas une erreur, et est accepté par le compilateur
+      	ANDi r1,r2,r3	// déclenche un avertissement, pas une erreur, et est accepté par le compilateur
+label:	sub r1 r2 5	// idem
 	jmp label-1
 
 Fin de l'exemple.

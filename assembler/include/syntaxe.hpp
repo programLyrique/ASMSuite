@@ -15,6 +15,7 @@ private :
 
   UniLex lex;
   bool isData; // pour savoir si les expressions acceptent des symboles ou pas.
+  bool err; // true s'il y a eu une erreur.
 
   Arbre *nb(); // fonctions intermédiaires
   Arbre *e();
@@ -31,7 +32,7 @@ private :
   int CallJmp(int);
   int Jr(int);
 public :
-  Syntaxe() : lCode(0,0), lCurrent(&lCode), cCode(0), cData(0) {}
+  Syntaxe() : lCode(0,0), lCurrent(&lCode), cCode(0), cData(0), err(false) {}
 
   int Read(FILE *fichier, std::ofstream *out); // fait l'analyse syntaxique du fichier.
 };
