@@ -39,11 +39,11 @@ void Arbre::Evaluate() {
     break;
 
   case MOINS :
-    if (fils[0]->type_noeud == UNDEFINED || fils[1]->type_noeud == UNDEFINED) {
+    if (fils[0]->type_noeud == UNDEFINED) {
       type_noeud = UNDEFINED;
     }
     else {
-      val_noeud = fils[0]->val_noeud-fils[1]->val_noeud;
+      val_noeud = -fils[0]->val_noeud;
     }
     break;
 

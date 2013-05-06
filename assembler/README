@@ -1,0 +1,31 @@
+Usage du compilateur : ./main code_source code_binaire
+
+Le langage est insensible à la casse, sauf pour les noms de labels (définis par l'utilisateur).
+Les commentaires sont sensables à ceux du C.
+Les expressions arithmétiques acceptent les opérateurs suivants : +*/- ^(exponentielle) %(modulo), ainsi que des parenthèses.
+
+Le code est divisé en deux types de sections : les sections de données (précédées par ".DATA" ou ".BSS") et les sections de code (précédées par ".CODE"). On peut créer autant de sections que l'on veut, dans l'ordre que l'on veut.
+
+Section .DATA :
+Commence par ".DATA" ou ".BSS" sans rien d'autre sur cette ligne (sauf éventuellement des commentaires).
+Une ligne de données est une expression arithmétique ne contenant pas de nom de label (par exemple, "1+monlabel" est incorrect), qui définit la taille d'une zone de données.
+Une ligne de données peut être précédée par la déclaration d'un ou plusieurs labels.
+Exemple :
+.BSS
+label_1: 3+2
+label_2: label_3: 4*3
+5%(3^4)
+
+Fin de l'exemple.
+
+Section .CODE :
+Commence par ".CODE" sans rien d'autre sur cette ligne (sauf éventuellement des commentaires).
+on écrit une instruction par ligne. Les opérandes peuvent être séparées par une virgule (optionnelle), les valeurs immédiates sont définies par des expressions arithmétiques qui peuvent contenir des noms de labels, et une instruction peut être séparée par la déclaration d'un ou plusieurs labels. Attention : deux labels ne peuvent avoir le même nom (même si l'un est un label de code et l'autre un label de données).
+Exemple :
+.CODE
+start :	add r0 r0 r0
+      	ANDi r1,r2,r3	// déclenche un avertissement, pas une erreur, et est accepté par le compilateur
+label:	sub r1 r2 5	// idem
+	jmp label-1
+
+Fin de l'exemple.

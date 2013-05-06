@@ -25,7 +25,7 @@ public :
   unsigned int GetColumn() { return column; }
   wchar_t GetChar() { return charcur; }
   wchar_t GetNextChar(); // incrémente le pointeur en sautant les éventuels commentaires et renvoit le caractère.
-  const wchar_t* GetString(); // renvoit la chaîne de caractères du lexème courant.
+  wchar_t* GetString(); // renvoit la chaîne de caractères du lexème courant.
 
   void newToken(); // saute les espaces et les tabulations, et efface la chaîne de caractère du lexème précédent.
 

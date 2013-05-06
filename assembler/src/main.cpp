@@ -3,7 +3,7 @@
 #include <cwchar>
 
 // debug de lexique.
-#include "lexique.hpp"
+#include "syntaxe.hpp"
 
 int main(int argc, char* argv[]) {
   setlocale(LC_ALL, ""); // pour ne pas avoir de problème avec les accents.
@@ -17,16 +17,18 @@ int main(int argc, char* argv[]) {
   
   FILE* in = fopen(argv[1], "r");
 		   /*in.open(argv[1], std::ios::in | std::ios::binary);
-  //in.imbue(std::locale(utf8_locale));
-  if (!in.is_open()) {
+		   //in.imbue(std::locale(utf8_locale));*/
+  if (in == 0) {
     std::wcout << argv[0] << " n'existe pas." << std::endl;
     return 1;
-    }*/
-  FILE* out = fopen(argv[2], "w");
-  UniLex::SetFichier(in);
+    }
+  //FILE* out = fopen(argv[2], "w");
+  std::ofstream o;
+  o.open(argv[2], std::ios::out | std::ios::binary);
+  /*UniLex::SetFichier(in);
   UniLex x;
   x.Read();
-  while (x.GetId() != E_O_F) {
+    while (x.GetId() != E_O_F) {
     switch (x.GetId()) {
     case UNDEFINED:
       fwprintf(out, L"UNDEFINED : %ls ", x.GetSymb().GetText());
@@ -90,5 +92,7 @@ int main(int argc, char* argv[]) {
     }
     x.Read();
   }
-  return 0;
+*/
+  Syntaxe s;
+  return s.Read(in, &o);
 }
