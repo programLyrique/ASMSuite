@@ -697,7 +697,7 @@ int Syntaxe::Read(FILE *in, std::ofstream *out) {
       std::wcerr << L"Erreur ligne " << lCurrent->GetLine() << L"\u00a0: " << L"la deuxième opérande doit être un registre." << std::endl;
       err = true;
       }
-      instr = 17 << 26;
+      instr = 18 << 26;
       instr += lCurrent->GetReg(0) << 11;
       instr += lCurrent->GetReg(1) << 16;
       break;
@@ -743,6 +743,14 @@ int Syntaxe::Read(FILE *in, std::ofstream *out) {
       break;
     }
 
+    std::wcout << lCurrent->GetInstr() << " : ";
+    for (int i = 31; i >= 0; i--) {
+      std::wcout << ((instr >> i) & 1);
+      if (i == 26) std::wcout << " "; 
+      if (i == 21) std::wcout << " ";
+      if (i == 16) std::wcout << " ";
+    }
+    std::wcout << std::endl;
     if (!err) out->write((const char*) &instr, 4);
     l = lCurrent;
     lCurrent = l->GetSuiv();

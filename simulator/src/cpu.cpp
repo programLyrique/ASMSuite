@@ -1,4 +1,5 @@
 #include "cpu.hpp"
+#include <fstream>
 
 void CPU::read_program (char* filename)
 {
@@ -16,3 +17,6 @@ void CPU::read_program (char* filename)
     bus_pc = 0;
 }
 
+void read_program (char *filename) {
+
+}

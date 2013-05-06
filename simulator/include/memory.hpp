@@ -17,4 +17,3 @@ class Memory {
         void store ();
 };
 #endif
-

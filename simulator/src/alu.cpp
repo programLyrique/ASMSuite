@@ -61,4 +61,3 @@ void ALU::do_op (int op)
     *out >= 0 ? *flag_p = 1 : *flag_p = 0;
     *out <= 0 ? *flag_n = 1 : *flag_n = 0;
 }
-
