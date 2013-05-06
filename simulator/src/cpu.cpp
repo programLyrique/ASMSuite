@@ -22,6 +22,8 @@ void CPU::read_program (char* filename)
     program_memory -> store();
     bus_pc++;
   }
+  pm_in = -1;
+  program_memory->store();
   bus_pc = 0;
   fclose(bin_file);
 }

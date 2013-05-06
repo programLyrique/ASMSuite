@@ -1,4 +1,6 @@
 #include "alu.hpp"
+#include <iostream>
+
 ALU::ALU(int32_t* _in1, int32_t* _in2, int32_t* _out, bool* _flag_z,
          bool* _flag_p, bool* _flag_n)
 {

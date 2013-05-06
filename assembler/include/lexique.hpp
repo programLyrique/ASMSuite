@@ -33,6 +33,7 @@ public :
   Symbole GetSymb() { return symb; }
 
   static void SetFichier(FILE *f);
+  static void DeleteFichier();
 
 };
 

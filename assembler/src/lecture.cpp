@@ -107,5 +107,5 @@ void Lecture::newToken() {
 
 Lecture::~Lecture() {
   //file->close(); // ou alors déléguer cela au main ?
-  delete buffer;
+  delete[] buffer;
 }

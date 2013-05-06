@@ -98,7 +98,7 @@ void Control_unit::jump_instruction ()
 
 void Control_unit::execute_program () // truc de guedin...
 {
-    while (true) {
+    while (inst != -1) {
         read_inst();
         decode_inst();
         execute_inst();
