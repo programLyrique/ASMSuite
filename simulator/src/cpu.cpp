@@ -9,7 +9,7 @@ void CPU::read_program (char* filename)
 {
   FILE* bin_file;
   bin_file = fopen(filename, "rb");
-  if (!in) {
+  if (!bin_file) {
     std::cerr << "Erreur : le fichier " << filename << " n'existe pas." << std::endl;
     exit(1);
   }
@@ -23,7 +23,7 @@ void CPU::read_program (char* filename)
     bus_pc++;
   }
   bus_pc = 0;
-  fclose(in);
+  fclose(bin_file);
 }
 
 void CPU::run() {
