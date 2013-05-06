@@ -96,7 +96,7 @@ void Control_unit::jump_instruction ()
     }
 }
 
-void Control_unit::execute_program ()
+void Control_unit::execute_program () // truc de guedin...
 {
     while (true) {
         read_inst();
@@ -104,5 +104,3 @@ void Control_unit::execute_program ()
         execute_inst();
     }
 }
-
-

@@ -52,7 +52,7 @@ class Control_unit {
         int32_t r1, r2, r3;
         int32_t im_value;
         int32_t addr26, addr11;
-
+public:
         void read_inst ();
         void decode_inst ();
         void execute_inst ();
@@ -89,4 +89,3 @@ class Control_unit {
         void execute_program ();
 };
 #endif
-

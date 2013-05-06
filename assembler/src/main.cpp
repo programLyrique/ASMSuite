@@ -8,7 +8,7 @@
 int main(int argc, char* argv[]) {
   setlocale(LC_ALL, ""); // pour ne pas avoir de problème avec les accents.
   if (argc != 3) {
-    std::wcout << L"Erreur critique : deux noms de fichiers requis !" << std::endl;
+    std::wcerr << L"Erreur critique\u00a0: deux noms de fichiers requis !" << std::endl;
     return 1;
   }
 
@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 		   /*in.open(argv[1], std::ios::in | std::ios::binary);
 		   //in.imbue(std::locale(utf8_locale));*/
   if (in == 0) {
-    std::wcout << argv[0] << " n'existe pas." << std::endl;
+    std::wcerr << L"Erreur critique\u00a0: " << argv[0] << L" n'existe pas." << std::endl;
     return 1;
     }
   //FILE* out = fopen(argv[2], "w");
