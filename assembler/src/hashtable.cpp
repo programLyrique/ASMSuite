@@ -91,4 +91,5 @@ void Hashtable::File(const char* file) {
       e = f->suiv;
     }
   }
+  out.close();
 }
