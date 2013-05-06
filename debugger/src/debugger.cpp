@@ -186,11 +186,12 @@ Debugger::~Debugger()
      */
 }
 
-void Debugger::displayRegister(int i)
+bool Debugger::displayRegister(int i)
 {
     ostringstream out;
     out << "REG[" << i << "] = "; //rajouter la bonne valeur
     interf.answer(out);
+    return true; //false si le registre est invalide
 }
 
 void Debugger::displayRegisters()
@@ -204,25 +205,27 @@ void Debugger::displayRegisters()
     interf.answer(out);
 }
 
-void Debugger::displayAddress(int addr)
+bool Debugger::displayAddress(int addr)
 {
     ostringstream out;
     out << "MEM[" << addr << "] = ";
     interf.answer(out);
+    return true; //false si l'adresse est invalide
 }
 
-void Debugger::displayAdress(int addr, int offset)
+bool Debugger::displayAdress(int addr, int offset)
 {
     ostringstream out;
     //out << 
+    return true; //false si l'adresse ou l'offset sont invalides
 }
 
-void Debugger::dumpMem(int addr, int offset, const string& fileName)
+bool Debugger::dumpMem(int addr, int offset, const string& fileName)
 {
     //ostream file(fileName);
 
     interf.answer("Sauvegarde de la plage mémoire dans le fichier.");
-
+    return true; //false si l'adresse ou l'offset sont invalides
 }
 
 bool Debugger::display(const vector<string>& args)
@@ -304,7 +307,7 @@ bool Debugger::dum(const vector<string>& args)
 
 bool Debugger::find(const vector<string>& args)
 {
-    if(args.size() != 1)
+    if (args.size() != 1)
     {
         errMess.badNumberArgs();
     }
@@ -312,7 +315,7 @@ bool Debugger::find(const vector<string>& args)
     {
         int32_t* seq = Search::parseSeq(args);
     }
-    catch(const exception& e)
+    catch (const exception& e)
     {
         errMess.badArgs();
     }
@@ -322,7 +325,7 @@ bool Debugger::find(const vector<string>& args)
 
 bool Debugger::find_next(const vector<string>& args)
 {
-    if(!args.empty())
+    if (!args.empty())
     {
         errMess.badNumberArgs();
         return false;
@@ -330,6 +333,71 @@ bool Debugger::find_next(const vector<string>& args)
     //Vérifier si une recherche a été lancée.
     //Continuer la recherche
     return true;
+}
+
+bool Debugger::writeMem(int adresse, int val, int offset)
+{
+
+}
+
+bool Debugger::writeReg(int reg, int val)
+{
+
+}
+
+bool Debugger::write(const vector<string>& args)
+{
+    int nbArgs = args.size();
+    if (nbArgs == 0)
+    {
+        return errMess.noSubCommand();
+    }
+
+    nbArgs--;
+    
+    try
+    {
+
+        if (args[0] == "adress")
+        {
+            if(nbArgs == 2)
+            {
+                writeMem(stoi(args[1]), stoi(args[2]));
+            }
+            else if(nbArgs == 3)
+            {
+                writeMem(stoi(args[1]), stoi(args[2]), stoi(args[3]));
+            }
+            else
+            {
+                return errMess.badNumberArgs();
+            }
+                
+        }
+        else if (args[0] == "register")
+        {
+            if(nbArgs == 2)
+            {
+                writeReg(stoi(args[1]), stoi(args[2]));
+            }
+            else
+            {
+                return errMess.badNumberArgs();
+            }
+        }
+        else
+        {
+            return errMess.unknownSubCommand();
+        }
+    }
+    catch (const out_of_range& e)
+    {
+        return errMess.badNumberArgs();
+    }
+    catch (const exception& e)
+    {
+        return errMess.badArgs();
+    }
 }
 
 }

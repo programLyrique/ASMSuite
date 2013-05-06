@@ -20,11 +20,11 @@ namespace debugger
     {
     public:
         ErrorMessages(CommandInterface& interf);
-        void badNumberArgs();
-        void badArgs();
-        void unknownSubCommand();
-        void unknownCommand();
-        void noSubCommand();
+        bool badNumberArgs();
+        bool badArgs();
+        bool unknownSubCommand();
+        bool unknownCommand();
+        bool noSubCommand();
         virtual ~ErrorMessages();
     private:
         CommandInterface& inter;

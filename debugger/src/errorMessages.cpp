@@ -15,29 +15,34 @@ ErrorMessages::ErrorMessages(CommandInterface& interf) : inter(interf)
 {
 }
 
-void ErrorMessages::badNumberArgs()
+bool ErrorMessages::badNumberArgs()
 {
     inter.errorMessage("Mauvais nombre d'arguments");
+    return false;
 }
 
-void ErrorMessages::badArgs()
+bool ErrorMessages::badArgs()
 {
     inter.errorMessage("Mauvais arguments");
+    return false;
 }
 
-void ErrorMessages::unknownSubCommand()
+bool ErrorMessages::unknownSubCommand()
 {
     inter.errorMessage("Sous-commande inconnue");
+    return false;
 }
 
-void ErrorMessages::unknownCommand()
+bool ErrorMessages::unknownCommand()
 {
     inter.errorMessage("Commande inconnue");
+    return false;
 }
 
-void ErrorMessages::noSubCommand()
+bool ErrorMessages::noSubCommand()
 {
     inter.errorMessage("Absence de sous-commande");
+    return false;
 }
 
 ErrorMessages::~ErrorMessages()

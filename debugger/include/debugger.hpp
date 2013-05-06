@@ -76,7 +76,13 @@ namespace debugger
          * @return 
          */
         bool find_next(const vector<string>& args);
-
+        
+        /**
+         * Ecrire dans un registre ou dans la mémoire
+         * @param args
+         * @return 
+         */
+        bool write(const vector<string>& args);
     public:
         /**
          *
@@ -103,7 +109,7 @@ namespace debugger
          * Affiche un registre
          * @param i
          */
-        void displayRegister(int r);
+        bool displayRegister(int r);
         
         /**
          * Affiche les valeurs de tous les registres;
@@ -114,14 +120,14 @@ namespace debugger
          * Affiche la valeur stockée à l'adresse demandée
          * @param addr
          */
-        void displayAddress(int addr);
+        bool displayAddress(int addr);
         
         /**
          * Affiche la plage mémoire [addr, addr+offset [
          * @param addr
          * @param offset
          */
-        void displayAdress(int addr, int offset);
+        bool displayAdress(int addr, int offset);
         
         /**
          * Sauvegarde la plage mémoire voulue dans un fichier.
@@ -129,10 +135,23 @@ namespace debugger
          * @param offset
          * @param file
          */
-        void dumpMem(int addr, int offset, const string& fileName);
+        bool dumpMem(int addr, int offset, const string& fileName);
         
-        
-
+        /**
+         * Ecris dans la mémoire une valeur ou une plage de valeurs
+         * @param adresse
+         * @param val
+         * @param offset décalage,0 par défaut
+         * \return false si échec (mauvais paramètres, par exemple)
+         */
+        bool writeMem(int adresse, int val, int offset =0);
+        /**
+         * Ecris une valeur dans un registre
+         * @param reg
+         * @param val
+         * \return false si échec
+         */
+        bool writeReg(int reg, int val);
         virtual ~Debugger();
 
     };
