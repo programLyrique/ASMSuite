@@ -1,11 +1,14 @@
 #ifndef TERMINAL_HPP
 #define TERMINAL_HPP
 
+#include <iostream>
 #include <vector>
 #include <string>
 #include <sstream>
-#include <map>
+#include <unordered_map>
 
+#include "debugger.hpp"
+#include "command.hpp"
 #include "commandInterface.hpp"
 
 
@@ -25,30 +28,41 @@ namespace debugger
         {
         }
         /**
-         * Ask for a new command by the debugger.
+         * Demande une nouvelle commande au debugger.
+         * \arg args sera rempli avec les arguments de la commande
+         * \return le type de la commande
          */
-        void prompt();
+        enum command::Command prompt(vector<string>& args);
         /**
          * Analyse les composantes de la commande 
          * et fait l'action correspondante.
          * @param tokens
          */
-        void analyseTokens(vector<string> tokens);
+       enum command::Command analyseTokens(vector<string> tokens);
         /**
          * \brief Parser la ligne de commande en séparant selon les espaces
          */
         static vector<string> parseCommandLine(string line);
+        
+        void errorMessage(string error)
+        {
+            cerr << error << endl;
+        }
+        
+        void answer(string message)
+        {
+            cout << message << endl;
+        }
 
         virtual ~Terminal()
         {
-        };
+        }
     private:
-        /// Stocker les commandes vers un foncteur
-        map<string, Command&> commands;
+        /// Stocker les commandes vers un enum de commandes
+        unordered_map<string, command::Command> commands;
 
     };
 
 }
 
 #endif
-

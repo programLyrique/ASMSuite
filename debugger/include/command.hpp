@@ -1,21 +1,33 @@
 /* 
- * File:   Command.hpp
+ * File:   command.hpp
  * Author: pierre
  *
- * Created on 6 mai 2013, 00:41
+ * Created on 6 mai 2013, 14:40
  */
 
 #ifndef COMMAND_HPP
 #define	COMMAND_HPP
 
-class Command
-{
-public:
-    virtual void operator() = 0;
-    virtual ~Command();
-private:
+//Quelques includes utiles
 
-};
+#include "IOBreakpoint.hpp"
+#include "adrBreakpoint.hpp"
+#include "instrBreakpoint.hpp"
+#include "labelBreakpoint.hpp"
+#include "lineBreakPoint.hpp"
+
+namespace debugger
+{
+
+    namespace command
+    {
+
+        enum Command
+        {
+            BREAKPOINT,
+        };
+    }
+}
 
 #endif	/* COMMAND_HPP */
 

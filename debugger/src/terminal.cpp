@@ -9,16 +9,13 @@ using namespace std;
 namespace debugger
 {
 
-    void Terminal::prompt()
+    command::Command Terminal::prompt(vector<string>& args)
     {
         cout << "> " << flush;
         string in;
         getline(cin, in); // on lit l'entrée
     }
 
-    /**
-     * \brief Parser la ligne de commande en séparant selon les espaces
-     */
     vector<string> Terminal::parseCommandLine(string line)
     {
         vector<string> tokens;
@@ -30,7 +27,7 @@ namespace debugger
          return tokens;
     }
     
-    void Terminal::analyseTokens(vector<string> tokens)
+    command::Command Terminal::analyseTokens(vector<string> tokens)
     {
         
     }
