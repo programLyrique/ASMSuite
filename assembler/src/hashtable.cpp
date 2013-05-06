@@ -85,7 +85,7 @@ void Hashtable::File(const char* file) {
 	c = new char[wcslen(e->name)+1];
 	wcstombs(c, e->name, wcslen(e->name)+1);
 	out << c << " " << (e->value) << std::endl;
-	delete c;
+	delete[] c;
       }
       f = e;
       e = f->suiv;
