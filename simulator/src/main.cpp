@@ -7,7 +7,7 @@
 
 using namespace std;
 
-int main ()
+int main2 ()
 {
     cout << "Simulateur" << std::endl;
     return 0;
