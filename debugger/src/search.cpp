@@ -6,7 +6,7 @@
  */
 
 #include "search.hpp"
-
+#include <sstream>
 
 using namespace std;
 
@@ -21,6 +21,7 @@ namespace debugger
     {
         current = 0;
         //mettre fin à la taille de la mémoire
+        delete[] this->seq;
         this->seq = seq;
         this->size_seq = size_seq;
         search = true;
@@ -30,6 +31,7 @@ namespace debugger
     {
         current = debut;
         fin =debut + offset;
+        delete[] this->seq;
         this->seq=seq;
         this->size_seq = size_seq;
         search = true;
@@ -43,6 +45,23 @@ namespace debugger
 
     Search::~Search()
     {
+        delete[] seq;
+    }
+    
+    int32_t* Search::parseSeq(const std::vector<std::string>& args)
+    {
+        int nbNumbers = args.size();
+        int32_t * seq = new int32_t[nbNumbers];
+        for(int i =0; i < nbNumbers ; i++)
+        {
+            stringstream conv;
+            int32_t nb;
+            conv << args[i];
+            conv >> nb;
+            seq[i] = nb;
+        }
+        
+        return seq;
     }
 
 }

@@ -9,13 +9,19 @@
 #define	SEARCH_HPP
 
 #include <cstdint>
+#include <vector>
+#include <string>
 
 class Memory;
+
 
 namespace debugger
 {
 /**
  * Pour effectuer des recherches dans la mémoire.
+ * Entrée sous la forme d'une suite de nombres hexadécimaux de 32 bits séparés par
+ *  des espaces
+ * \example FFFF 56
  * @param mem
  */
 class Search
@@ -45,6 +51,8 @@ public:
      * @return -1 s'il n'y a plus rien
      */
     int find_next();
+    
+    static int32_t* parseSeq(const std::vector<std::string>& args);
     
     bool isSearching()
     {

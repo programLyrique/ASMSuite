@@ -43,6 +43,8 @@ namespace debugger
         
         unordered_map<string, breakpoint::Breakpoint_t> break_commands;
         
+        /* Méthodes pour parser les arguments des commandes*/
+        
         /**
          * Etudie les arguments pour créer le bon type de breakpoints
          * @param args
@@ -62,6 +64,18 @@ namespace debugger
          * @return 
          */
         bool dum(const vector<string>& args);
+        /**
+         * Lance une recherche et renvoie le premier résultat
+         * @param args
+         * @return 
+         */
+        bool find(const vector<string>& args);
+        /**
+         * Continue la recherche en renvoyant le résultat suivant s'il existe
+         * @param args
+         * @return 
+         */
+        bool find_next(const vector<string>& args);
 
     public:
         /**
@@ -116,6 +130,8 @@ namespace debugger
          * @param file
          */
         void dumpMem(int addr, int offset, const string& fileName);
+        
+        
 
         virtual ~Debugger();
 

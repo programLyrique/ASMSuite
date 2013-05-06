@@ -68,6 +68,10 @@ bool Debugger::interact()
         case command::DUMP:
             dum(args);
             break;
+        case command::SEARCH:
+            break;
+        case command::SEARCH_NEXT:
+            break;
         default:
             errMess.unknownCommand();
             break;
@@ -163,7 +167,7 @@ Breakpoint* Debugger::addBreakpoint(const vector<string>& args)
     }
     catch (const out_of_range& e)
     {
-       errMess.badNumberArgs();
+        errMess.badNumberArgs();
     }
     catch (const exception& e)
     {
@@ -278,7 +282,7 @@ bool Debugger::display(const vector<string>& args)
 
 bool Debugger::dum(const vector<string>& args)
 {
-    if(args.size() != 3)
+    if (args.size() != 3)
     {
         errMess.badNumberArgs();
         return false;
@@ -289,13 +293,43 @@ bool Debugger::dum(const vector<string>& args)
         {
             dumpMem(stoi(args[0]), stoi(args[1]), args[2]);
         }
-        catch(const exception& e )
+        catch (const exception& e)
         {
             errMess.badArgs();
             return false;
-        }               
+        }
         return true;
     }
+}
+
+bool Debugger::find(const vector<string>& args)
+{
+    if(args.size() != 1)
+    {
+        errMess.badNumberArgs();
+    }
+    try
+    {
+        int32_t* seq = Search::parseSeq(args);
+    }
+    catch(const exception& e)
+    {
+        errMess.badArgs();
+    }
+    //Lancer la première recherche
+    return true;
+}
+
+bool Debugger::find_next(const vector<string>& args)
+{
+    if(!args.empty())
+    {
+        errMess.badNumberArgs();
+        return false;
+    }
+    //Vérifier si une recherche a été lancée.
+    //Continuer la recherche
+    return true;
 }
 
 }
