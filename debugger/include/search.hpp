@@ -45,6 +45,11 @@ public:
      * @return -1 s'il n'y a plus rien
      */
     int find_next();
+    
+    bool isSearching()
+    {
+        return search;
+    }
     virtual ~Search();
 private:
     const Memory& mem;
@@ -53,6 +58,7 @@ private:
     int current;
     int debut;
     int fin;
+    bool search;
 };
 
 }

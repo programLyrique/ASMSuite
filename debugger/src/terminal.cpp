@@ -15,6 +15,12 @@ namespace debugger
         
         //Breakpoints
         commands["breakpoint"] = command::BREAKPOINT;
+        commands["display"] = command::DISPLAY;
+        commands["dump"] = command::DUMP;
+        commands["print"] = command::PRINT;
+        commands["write"] = command::WRITE;
+        commands["find"] = command::SEARCH;
+        commands["find-next"] = command::SEARCH_NEXT;
     }
     
     command::Command Terminal::prompt(vector<string>& args)

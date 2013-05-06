@@ -2,7 +2,7 @@
 #define COMMAND_INTERFACE_H
 
 #include <vector>
-
+#include <sstream>
 #include <string>
 
 //#include "debugger.hpp"
@@ -38,7 +38,9 @@ namespace debugger
          * Pour afficher les réponses du debugger
          * @param message
          */
-        virtual void answer(string message) = 0;
+        virtual void answer(const string& message) = 0;
+        
+        virtual void answer(const ostringstream& message) = 0;
 
         virtual ~CommandInterface()
         {

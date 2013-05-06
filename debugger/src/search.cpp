@@ -23,6 +23,7 @@ namespace debugger
         //mettre fin à la taille de la mémoire
         this->seq = seq;
         this->size_seq = size_seq;
+        search = true;
     }
     
     void Search::new_search(int32_t* seq, int size_seq, int debut, int offset)
@@ -31,10 +32,12 @@ namespace debugger
         fin =debut + offset;
         this->seq=seq;
         this->size_seq = size_seq;
+        search = true;
     }
     
     int Search::find_next()
     {
+        //Mettre search à false si la recherche est finie
         return current;
     }
 

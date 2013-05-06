@@ -10,6 +10,8 @@
 
 #include <string>
 
+class CPU;//en attendant l'include du simulateur
+
 using namespace std;
 
 namespace debugger
@@ -38,7 +40,7 @@ namespace debugger
 
         virtual ~Breakpoint() {};
     private:
-
+        CPU* cpu;
     };
 
 }

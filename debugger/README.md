@@ -78,7 +78,7 @@ c.f. gdb
 ## internals
 ras pour l'instant
 
-##
+## Various
 - `compare adresse offset fichier` : compare le dump conservé dans fichier avec 
 le contenu de la mémoire [adresse, adresse + offset]
 - `compare fichier` : compare le dump des registres avec les valeurs de registre courant

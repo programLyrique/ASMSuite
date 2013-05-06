@@ -47,7 +47,12 @@ namespace debugger
             cerr << error << endl;
         }
         
-        void answer(string message)
+        void answer(const ostringstream& message)
+        {
+            cout << message.str() << endl;
+        }
+        
+        void answer(const string& message)
         {
             cout << message << endl;
         }

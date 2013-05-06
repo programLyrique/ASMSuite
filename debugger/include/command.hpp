@@ -25,6 +25,12 @@ namespace debugger
         enum Command
         {
             BREAKPOINT,
+            SEARCH,
+            SEARCH_NEXT,
+            DISPLAY,
+            DUMP,
+            PRINT,
+            WRITE,
             ERROR            
         };
     }
