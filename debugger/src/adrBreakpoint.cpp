@@ -20,7 +20,7 @@ namespace debugger
 
     bool AdrBreakpoint::isBreak()
     {
-        
+        return true;
     }
     
     AdrBreakpoint::~AdrBreakpoint()

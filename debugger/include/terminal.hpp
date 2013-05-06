@@ -24,9 +24,7 @@ namespace debugger
     {
     public:
 
-        Terminal()
-        {
-        }
+        Terminal();
         /**
          * Demande une nouvelle commande au debugger.
          * \arg args sera rempli avec les arguments de la commande

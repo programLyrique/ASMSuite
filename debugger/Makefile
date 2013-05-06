@@ -3,7 +3,7 @@ SRC_DIR=$(ROOT_DIR)/src
 INC_DIR=$(ROOT_DIR)/include
 OUT_DIR=$(ROOT_DIR)/bin
 CC=g++
-CFLAGS=-W -Wall -ansi -pedantic -std=c++0x
+CFLAGS=-W -Wall -ansi -pedantic -g -std=c++0x
 LDFLAGS=
 
 INCLUDE=-I. -I/usr/include -I$(INC_DIR)

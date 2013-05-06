@@ -25,6 +25,7 @@ namespace debugger
         enum Command
         {
             BREAKPOINT,
+            ERROR            
         };
     }
 }

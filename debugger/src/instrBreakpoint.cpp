@@ -16,7 +16,7 @@ namespace debugger
 
     bool InstrBreakpoint::isBreak()
     {
-
+        return true;
     }
 
     InstrBreakpoint::InstrBreakpoint(const InstrBreakpoint& orig)

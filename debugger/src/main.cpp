@@ -6,6 +6,7 @@
 #include <string>
 
 #include "terminal.hpp"
+#include "debugger.hpp"
 
  /**
   * \mainpage Architecture du debugger :
@@ -23,15 +24,20 @@
  {
     cout << "Debugger" << endl;
 
-    string in;
+//    string in;
+//    
+//    getline(cin, in);
+//
+//    vector<string> tokens = Terminal::parseCommandLine(in);
+//
+//    for(int i = 0; i < tokens.size() ; i++)
+//    {
+//        cout << tokens[i] << endl;
+//    }
     
-    getline(cin, in);
+    Terminal terminal;
+    Debugger debugger(terminal);
+    debugger.interact();
 
-    vector<string> tokens = Terminal::parseCommandLine(in);
-
-    for(int i = 0; i < tokens.size() ; i++)
-    {
-        cout << tokens[i] << endl;
-    }
     return 0;
  }

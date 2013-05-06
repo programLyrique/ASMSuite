@@ -21,7 +21,7 @@ namespace debugger
 
     bool LineBreakpoint::isBreak()
     {
-        
+        return true;
     }
     
     LineBreakpoint::~LineBreakpoint()
