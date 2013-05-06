@@ -10,17 +10,17 @@
 
 
 class CPU {
-    private:
-        int32_t bus_in, bus_out1, bus_out2;
-        int32_t bus_pc, bus_inst; // Program Memory <=> Control unit
-        int32_t pm_in;
-        bool flag_z, flag_p, flag_n;
-        ALU* alu;
-        Registers* registers;
-        Memory* data_memory;
-        Memory* program_memory;
-        Control_unit* control_unit;
-        IO* io;
+private:
+  int32_t bus_in, bus_out1, bus_out2;
+  int32_t bus_pc, bus_inst; // Program Memory <=> Control unit
+  int32_t pm_in; // pour lire le programme.
+  bool flag_z, flag_p, flag_n; // mais les flags ne servent à rien...
+  ALU* alu;
+  Registers* registers;
+  Memory* data_memory;
+  Memory* program_memory;
+  Control_unit* control_unit;
+  IO* io;
 
     public:
         CPU()
@@ -38,6 +38,8 @@ class CPU {
 
         void read_program (char* filename);
         
+  void run(); // exécute une instruction.
+
         Memory* getDataMemory() const
         { 
             return data_memory;

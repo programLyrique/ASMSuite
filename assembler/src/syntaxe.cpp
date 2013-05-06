@@ -758,5 +758,7 @@ int Syntaxe::Read(FILE *in, std::ofstream *out) {
     lCurrent = l->GetSuiv();
     // délétion automatique des éléments de la liste, on ne s'en soucie pas.
   }
+  out->close();
+  fclose(in);
   return 0;
 }
