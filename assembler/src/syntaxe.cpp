@@ -743,6 +743,7 @@ int Syntaxe::Read(FILE *in, std::ofstream *out) {
       break;
     }
 
+    /*
     std::wcout << lCurrent->GetInstr() << " : ";
     for (int i = 31; i >= 0; i--) {
       std::wcout << ((instr >> i) & 1);
@@ -751,6 +752,7 @@ int Syntaxe::Read(FILE *in, std::ofstream *out) {
       if (i == 16) std::wcout << " ";
     }
     std::wcout << std::endl;
+    */
     if (!err) out->write((const char*) &instr, 4);
     l = lCurrent;
     lCurrent = l->GetSuiv();
