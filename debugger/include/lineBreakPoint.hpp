@@ -9,6 +9,7 @@
 #define	LINEBREAKPOINT_HPP
 
 #include "breakpoint.hpp"
+#include "cpu.hpp"
 
 namespace debugger
 {
@@ -20,12 +21,13 @@ namespace debugger
     class LineBreakpoint : public Breakpoint
     {
     public:
-        LineBreakpoint(int line);
+        LineBreakpoint(CPU* cpu, int line);
         LineBreakpoint(const LineBreakpoint& orig);
         bool isBreak();
         virtual ~LineBreakpoint();
     private:
         int line;
+        CPU* cpu;
 
     };
 

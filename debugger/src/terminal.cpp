@@ -21,6 +21,7 @@ namespace debugger
         commands["write"] = command::WRITE;
         commands["find"] = command::SEARCH;
         commands["find-next"] = command::SEARCH_NEXT;
+        commands["exit"] = command::EXIT;
     }
     
     command::Command Terminal::prompt(vector<string>& args)
@@ -29,6 +30,10 @@ namespace debugger
         string in;
         getline(cin, in); // on lit l'entrée
         
+        if(cin.eof())//appui sur ctrl+d
+        {
+            return command::EXIT;
+        }
         
         vector<string> tokens = parseCommandLine(in);
         if(tokens.size() == 0)

@@ -7,11 +7,12 @@
 
 #include "lineBreakPoint.hpp"
 
+#include <iostream>
 
 namespace debugger
 {
 
-    LineBreakpoint::LineBreakpoint(int line) : line(line)
+    LineBreakpoint::LineBreakpoint(CPU* cpu, int line) : cpu(cpu), line(line)
     {
     }
 
@@ -21,7 +22,7 @@ namespace debugger
 
     bool LineBreakpoint::isBreak()
     {
-        return true;
+        return cpu->getBus_pc() == static_cast<int32_t>(line);
     }
     
     LineBreakpoint::~LineBreakpoint()

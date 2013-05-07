@@ -19,21 +19,22 @@
 namespace debugger
 {
 
-    namespace command
-    {
+namespace command
+{
 
-        enum Command
-        {
-            BREAKPOINT,
-            SEARCH,
-            SEARCH_NEXT,
-            DISPLAY,
-            DUMP,
-            PRINT,
-            WRITE,
-            ERROR            
-        };
-    }
+enum Command
+{
+    BREAKPOINT,
+    SEARCH,
+    SEARCH_NEXT,
+    DISPLAY,
+    DUMP,
+    PRINT,
+    WRITE,
+    ERROR,
+    EXIT
+};
+}
 }
 
 #endif	/* COMMAND_HPP */
