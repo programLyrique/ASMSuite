@@ -29,7 +29,7 @@ class Memory {
         void store ();
         int32_t readMem(int ad) const 
         { 
-            if(memory[static_cast<int32_t>(ad) / N] != NULL)
+            if(memory[static_cast<int32_t>(ad) / N] != nullptr)
             {
                 return memory[static_cast<int32_t>(ad) / N][static_cast<int32_t>(ad) % N];
             }
@@ -43,6 +43,10 @@ class Memory {
         long sizeMem() const { return (long)N*(long)N;}
         void writeMem(int ad, int32_t val) 
         { 
+            if(memory[static_cast<int32_t>(ad) / N] == nullptr)
+            {
+                memory[static_cast<int32_t>(ad) / N] = new int32_t[N];
+            }
             memory[static_cast<int32_t>(ad) / N][static_cast<int32_t>(ad) % N] = val;
         }
 };

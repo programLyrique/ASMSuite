@@ -1,5 +1,7 @@
 #include "debugger.hpp"
+
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -56,16 +58,15 @@ bool Debugger::interact()
         switch (command)
         {
         case command::BREAKPOINT:
-            if (addBreakpoint(args) != nullptr)
+            if ((breakpoint = addBreakpoint(args)) != nullptr)
             {
                 breakpoints.push_back(breakpoint);
-                cont = false;
             }
             //addBreakpoint se charge d'indiquer les erreurs
 
             break;
         case command::DISPLAY:
-            cont = !display(args);
+            display(args);
             break;
         case command::PRINT:
             for (int i = 0; i < args.size(); i++)
@@ -73,17 +74,19 @@ bool Debugger::interact()
                 out << args[i] << " ";
             }
             interf.answer(out);
-            cont = false;
             break;
         case command::DUMP:
-            cont = !dum(args);
+            dum(args);
             break;
         case command::SEARCH:
             break;
         case command::SEARCH_NEXT:
             break;
         case command::WRITE:
-            cont = !write(args);
+           write(args);
+            break;
+        case command::RUN:
+            cont = false;
             break;
         case command::EXIT:
             cont = false;
@@ -233,7 +236,6 @@ void Debugger::displayRegisters()
 
 bool Debugger::displayAddress(int addr)
 {
-    cerr << sim->getData_memory()->sizeMem() << endl;
     if(addr < 0 || addr > sim->getData_memory()->sizeMem())
     {
         return false;
@@ -250,15 +252,14 @@ bool Debugger::displayAdress(int addr, int offset)
     {
         return false;
     }
-    ostringstream out;
     //Affichage 12 lignes par 12 lignes
     int nbLignes = offset / 12;
     for(int i =0; i < nbLignes;i++)
     {
-           out.clear(); 
-           for(int ad=12*i; ad < offset && ad < sim->getData_memory()->sizeMem(); ad++)
+           ostringstream out;
+           for(int ad=12*i; ad < 12*(i+1) && ad < addr+ offset && ad < sim->getData_memory()->sizeMem(); ad++)
            {
-               out << sim->getData_memory()->readMem(ad) << " ";
+               out << setw(10) << sim->getData_memory()->readMem(ad) << " ";
            }
            interf.answer(out);
     }
@@ -418,7 +419,7 @@ bool Debugger::write(const vector<string>& args)
     try
     {
 
-        if (args[0] == "adress")
+        if (args[0] == "address")
         {
             if(nbArgs == 2)
             {

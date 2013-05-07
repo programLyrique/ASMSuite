@@ -32,6 +32,7 @@ enum Command
     PRINT,
     WRITE,
     ERROR,
+    RUN,
     EXIT
 };
 }

@@ -5,7 +5,7 @@ INC_DIR=$(ROOT_DIR)/include
 INC_DIR2=$(ROOT_DIR)/../simulator/include
 OUT_DIR=$(ROOT_DIR)/bin
 CC=g++
-CFLAGS=-W -Wall -ansi -pedantic -g -std=c++0x
+CFLAGS=-W -Wall -ansi -pedantic -g -ggdb -std=c++0x
 LDFLAGS=
 
 INCLUDE=-I. -I/usr/include -I$(INC_DIR) -I$(INC_DIR2)

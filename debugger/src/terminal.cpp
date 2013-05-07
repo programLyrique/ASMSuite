@@ -21,6 +21,7 @@ namespace debugger
         commands["write"] = command::WRITE;
         commands["find"] = command::SEARCH;
         commands["find-next"] = command::SEARCH_NEXT;
+        commands["run"] = command::RUN;
         commands["exit"] = command::EXIT;
     }
     
