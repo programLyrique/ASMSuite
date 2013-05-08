@@ -26,7 +26,7 @@ namespace debugger
          * @param args
          * @return 
          */
-        virtual enum command::Command prompt(vector<string>& args) = 0;
+        virtual enum command::Command prompt(int nb_cycles, int pc, vector<string>& args) = 0;
 
         /**
          * Affiche un message en cas d'erreur.

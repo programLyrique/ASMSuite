@@ -30,7 +30,7 @@ namespace debugger
          * \arg args sera rempli avec les arguments de la commande
          * \return le type de la commande
          */
-        enum command::Command prompt(vector<string>& args);
+        enum command::Command prompt(int nb_cycles, int pc, vector<string>& args);
         /**
          * Analyse les composantes de la commande 
          * et fait l'action correspondante.

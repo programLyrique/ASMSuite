@@ -22,12 +22,14 @@ namespace debugger
         commands["find"] = command::SEARCH;
         commands["find-next"] = command::SEARCH_NEXT;
         commands["run"] = command::RUN;
+        commands["next"] = command::NEXT;
+        commands["step"] = command::STEP;
         commands["exit"] = command::EXIT;
     }
     
-    command::Command Terminal::prompt(vector<string>& args)
+    command::Command Terminal::prompt(int nb_cycles, int pc, vector<string>& args)
     {
-        cout << "\n> " << flush;
+        cout << "\n" << nb_cycles << " [PC=" << pc <<"] > " << flush;
         string in;
         getline(cin, in); // on lit l'entrée
         

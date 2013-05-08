@@ -33,6 +33,8 @@ enum Command
     WRITE,
     ERROR,
     RUN,
+    NEXT,
+    STEP,
     EXIT
 };
 }

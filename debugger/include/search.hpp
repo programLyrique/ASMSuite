@@ -11,8 +11,9 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+#include <algorithm>
 
-class Memory;
+#include "memory.hpp"
 
 
 namespace debugger

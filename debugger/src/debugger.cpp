@@ -8,7 +8,7 @@ using namespace std;
 namespace debugger
 {
 
-Debugger::Debugger(CommandInterface& inter, CPU* cpu) : interf(inter), errMess(inter), sim(cpu)
+Debugger::Debugger(CommandInterface& inter, CPU* cpu) : interf(inter), errMess(inter), sim(cpu), n_instr(1), nb_cycles(0)
 {
     /*
      * Initialisation des correspondances de sous-commandes pour les points d'arrêt
@@ -20,7 +20,7 @@ Debugger::Debugger(CommandInterface& inter, CPU* cpu) : interf(inter), errMess(i
     break_commands["adr"] = breakpoint::ADR;
 
     //On s'arrête au début.
-    breakpoints.push_back(new LineBreakpoint(sim, 1));
+    //breakpoints.push_back(new LineBreakpoint(sim, 1));
 
 }
 
@@ -28,6 +28,7 @@ Debugger::Debugger(CommandInterface& inter, CPU* cpu) : interf(inter), errMess(i
 bool Debugger::interact()
 {
     bool contDebug = true;
+    
     //Point d'arrêt ?
     bool breaks;
     for (int i = 0; i < breakpoints.size(); i++)
@@ -38,7 +39,11 @@ bool Debugger::interact()
             break;
         }
     }
-    if (breaks)
+    if(n_instr > 0)
+    {
+        n_instr--;
+    }
+    if (breaks || n_instr == 0)
     {
         /*ostringstream outPC;
         outPC << "PC : " << sim->getBus_pc();
@@ -49,7 +54,7 @@ bool Debugger::interact()
          {
         vector<string> args;
         //On affiche l'invite pour rentrer une commande de debogage
-        command::Command command = interf.prompt(args);
+        command::Command command = interf.prompt(nb_cycles, sim->getBus_pc(), args);
 
 
         //Déclaration pour les variables du switch (plutôt que d'utiliser -fpermissive)
@@ -63,7 +68,7 @@ bool Debugger::interact()
                 breakpoints.push_back(breakpoint);
             }
             //addBreakpoint se charge d'indiquer les erreurs
-
+            n_instr=0;//On remet le compteur de suivi d'exécution à 0
             break;
         case command::DISPLAY:
             display(args);
@@ -92,6 +97,14 @@ bool Debugger::interact()
             cont = false;
             contDebug = false;
             interf.answer("\nExiting..");
+            break;
+        case command::NEXT:
+            cont = false;
+            n_instr = 1;
+            break;
+        case command::STEP:
+            step(args);
+            cont = false;
             break;
         default:
             errMess.unknownCommand();
@@ -460,6 +473,23 @@ bool Debugger::write(const vector<string>& args)
         return errMess.badArgs();
     }
     
+    return true;
+}
+
+bool Debugger::step(const vector<string>& args)
+{
+    try 
+    {
+        n_instr = stoi(args[0]);
+    }
+    catch(const out_of_range& e)
+    {
+        return errMess.badNumberArgs();
+    }
+    catch(const exception& e)
+    {
+        return errMess.badArgs();
+    }
     return true;
 }
 
