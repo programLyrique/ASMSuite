@@ -11,14 +11,14 @@ LDFLAGS=
 INCLUDE=-I. -I/usr/include -I$(INC_DIR) -I$(INC_DIR2)
 LIBS=-L/usr/lib
 
-EXEC=main
+EXEC=debugger
 SRC=$(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR2)/*.cpp)
 OBJ=$(SRC:.cpp=.o)
 
-all: $(EXEC)
+all: main
 
 main: $(OBJ)
-	$(CC) -o $(OUT_DIR)/$@ $^ $(LDFLAGS) $(LIBS) $(INCLUDE)
+	$(CC) -o $(OUT_DIR)/$(EXEC) $^ $(LDFLAGS) $(LIBS) $(INCLUDE)
 
 %.o: %.cpp
 	$(CC) -o $@ -c $< $(CFLAGS) $(INCLUDE)

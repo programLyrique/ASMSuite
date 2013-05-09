@@ -47,6 +47,10 @@ private:
     
     //Informations sur l'exécution en cours
     int nb_cycles;
+    
+    //Protéger l'exécution du simulateur s'il y a une interruption SIGINT
+    bool protect;
+    
     //Tables de hashage pour parser
     unordered_map<string, breakpoint::Breakpoint_t> break_commands;
 
@@ -96,11 +100,11 @@ private:
      * @return 
      */
     bool step(const vector<string>& args);
+    
 public:
     /**
      *
      */
-
     Debugger(CommandInterface& inter, CPU* cpu = nullptr);
 
     /**
@@ -166,6 +170,14 @@ public:
      * \return false si échec
      */
     bool writeReg(int reg, int val);
+    
+    /**
+     * Ecrire une valeur dans un port.
+     * @param port
+     * @param val
+     * @return 
+     */
+    bool writePort(int port, int val);
     virtual ~Debugger();
 
     /**
@@ -179,8 +191,10 @@ public:
         interact();
         while (sim->getBus_inst() != -1 && cont)
         {
+            protect = true;
             sim->run();
             nb_cycles++;
+            protect = false;
             cont = interact();
             
         }
@@ -188,7 +202,9 @@ public:
         
         return cont;
     }
-
+    
+    bool isProtected(){ return protect;}
+    
 };
 
 

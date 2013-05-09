@@ -6,6 +6,7 @@
 #include <string>
 #include <sstream>
 #include <unordered_map>
+#include <csignal>
 
 #include "debugger.hpp"
 #include "command.hpp"
@@ -60,10 +61,16 @@ namespace debugger
         virtual ~Terminal()
         {
         }
+        
+        /**
+         * Pour intercepter ctrl+c (mais une seule fois)
+         * @param signal
+         */
+        static void interrupt_handler(int signal);
     private:
         /// Stocker les commandes vers un enum de commandes
         unordered_map<string, command::Command> commands;
-
+        static bool interrupt;
     };
 
 }

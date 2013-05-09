@@ -1,19 +1,23 @@
 #include "io.hpp"
 
+#include <iostream>
+
 void IO::input ()
 {
+    char rslt;
     if (*port == 0) {
-        char rslt = getchar();
-        *out = (int32_t) rslt;
+        rslt = getchar();
     } else {
         char filename[15];
         sprintf(filename, "io%010d",*port);
         FILE* fi = fopen(filename, "r");
         if (fi == NULL) {
+            std::cerr << "Impossible d'accéder au port." <<std::endl;
         }
-        fgetc(fi);
+        rslt =  fgetc(fi);
         fclose(fi);
     }
+    *out = (int32_t) rslt;
 }
 
 void IO::output ()

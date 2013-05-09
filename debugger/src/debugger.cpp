@@ -2,14 +2,22 @@
 
 #include <iostream>
 #include <iomanip>
+#include "commandInterface.hpp"
 
 using namespace std;
 
 namespace debugger
 {
 
-Debugger::Debugger(CommandInterface& inter, CPU* cpu) : interf(inter), errMess(inter), sim(cpu), n_instr(1), nb_cycles(0)
+
+Debugger::Debugger(CommandInterface& inter, CPU* cpu) : interf(inter), errMess(inter),
+        sim(cpu), n_instr(1), nb_cycles(0), protect(false)
 {
+    
+    //On attache le debugger à l'interface
+    
+    //CommandInterface:attach_debugger(this);
+    
     /*
      * Initialisation des correspondances de sous-commandes pour les points d'arrêt
      */
@@ -24,11 +32,10 @@ Debugger::Debugger(CommandInterface& inter, CPU* cpu) : interf(inter), errMess(i
 
 }
 
-
 bool Debugger::interact()
 {
     bool contDebug = true;
-    
+
     //Point d'arrêt ?
     bool breaks;
     for (int i = 0; i < breakpoints.size(); i++)
@@ -39,7 +46,7 @@ bool Debugger::interact()
             break;
         }
     }
-    if(n_instr > 0)
+    if (n_instr > 0)
     {
         n_instr--;
     }
@@ -49,70 +56,70 @@ bool Debugger::interact()
         outPC << "PC : " << sim->getBus_pc();
         interf.answer(outPC);*/
         bool cont = true;
-         
-         while(cont)
-         {
-        vector<string> args;
-        //On affiche l'invite pour rentrer une commande de debogage
-        command::Command command = interf.prompt(nb_cycles, sim->getBus_pc(), args);
 
-
-        //Déclaration pour les variables du switch (plutôt que d'utiliser -fpermissive)
-        Breakpoint * breakpoint; //pourtant locale...
-        ostringstream out;
-        switch (command)
+        while (cont)
         {
-        case command::BREAKPOINT:
-            if ((breakpoint = addBreakpoint(args)) != nullptr)
+            vector<string> args;
+            //On affiche l'invite pour rentrer une commande de debogage
+            command::Command command = interf.prompt(nb_cycles, sim->getBus_pc(), args);
+
+
+            //Déclaration pour les variables du switch (plutôt que d'utiliser -fpermissive)
+            Breakpoint * breakpoint; //pourtant locale...
+            ostringstream out;
+            switch (command)
             {
-                breakpoints.push_back(breakpoint);
+            case command::BREAKPOINT:
+                if ((breakpoint = addBreakpoint(args)) != nullptr)
+                {
+                    breakpoints.push_back(breakpoint);
+                }
+                //addBreakpoint se charge d'indiquer les erreurs
+                n_instr = 0; //On remet le compteur de suivi d'exécution à 0
+                break;
+            case command::DISPLAY:
+                display(args);
+                break;
+            case command::PRINT:
+                for (int i = 0; i < args.size(); i++)
+                {
+                    out << args[i] << " ";
+                }
+                interf.answer(out);
+                break;
+            case command::DUMP:
+                dum(args);
+                break;
+            case command::SEARCH:
+                break;
+            case command::SEARCH_NEXT:
+                break;
+            case command::WRITE:
+                write(args);
+                break;
+            case command::RUN:
+                cont = false;
+                n_instr = -1;
+                break;
+            case command::EXIT:
+                cont = false;
+                contDebug = false;
+                interf.answer("\nExiting..");
+                break;
+            case command::NEXT:
+                cont = false;
+                n_instr = 1;
+                break;
+            case command::STEP:
+                step(args);
+                cont = false;
+                break;
+            default:
+                errMess.unknownCommand();
+                break;
             }
-            //addBreakpoint se charge d'indiquer les erreurs
-            n_instr=0;//On remet le compteur de suivi d'exécution à 0
-            break;
-        case command::DISPLAY:
-            display(args);
-            break;
-        case command::PRINT:
-            for (int i = 0; i < args.size(); i++)
-            {
-                out << args[i] << " ";
-            }
-            interf.answer(out);
-            break;
-        case command::DUMP:
-            dum(args);
-            break;
-        case command::SEARCH:
-            break;
-        case command::SEARCH_NEXT:
-            break;
-        case command::WRITE:
-           write(args);
-            break;
-        case command::RUN:
-            cont = false;
-            break;
-        case command::EXIT:
-            cont = false;
-            contDebug = false;
-            interf.answer("\nExiting..");
-            break;
-        case command::NEXT:
-            cont = false;
-            n_instr = 1;
-            break;
-        case command::STEP:
-            step(args);
-            cont = false;
-            break;
-        default:
-            errMess.unknownCommand();
-            break;
         }
-         }
     }
-    
     return contDebug;
 }
 
@@ -226,11 +233,11 @@ Debugger::~Debugger()
 bool Debugger::displayRegister(int i)
 {
     ostringstream out;
-    if(i > sim->getRegisters()->nbRegisters() || i == 0)
+    if (i > sim->getRegisters()->nbRegisters() || i == 0)
     {
         return false;
     }
-    out << "REG[" << i << "] = " << sim->getRegisters()->readReg(i-1); //rajouter la bonne valeur
+    out << "REG[" << i << "] = " << sim->getRegisters()->readReg(i - 1); //rajouter la bonne valeur
     interf.answer(out);
     return true; //false si le registre est invalide
 }
@@ -241,7 +248,7 @@ void Debugger::displayRegisters()
     int nbRegistres = sim->getRegisters()->nbRegisters();
     for (int i = 1; i <= nbRegistres; i += 2)
     {
-        out << "REG[" << i << "] = " << sim->getRegisters()->readReg(i-1)
+        out << "REG[" << i << "] = " << sim->getRegisters()->readReg(i - 1)
                 << "\t REG[" << (i + 1) << "] = " << sim->getRegisters()->readReg(i) << endl;
     }
     interf.answer(out);
@@ -249,7 +256,7 @@ void Debugger::displayRegisters()
 
 bool Debugger::displayAddress(int addr)
 {
-    if(addr < 0 || addr > sim->getData_memory()->sizeMem())
+    if (addr < 0 || addr > sim->getData_memory()->sizeMem())
     {
         return false;
     }
@@ -261,20 +268,20 @@ bool Debugger::displayAddress(int addr)
 
 bool Debugger::displayAdress(int addr, int offset)
 {
-    if(offset < 0 || addr < 0)
+    if (offset < 0 || addr < 0)
     {
         return false;
     }
     //Affichage 12 lignes par 12 lignes
     int nbLignes = offset / 12;
-    for(int i =0; i < nbLignes;i++)
+    for (int i = 0; i < nbLignes; i++)
     {
-           ostringstream out;
-           for(int ad=12*i; ad < 12*(i+1) && ad < addr+ offset && ad < sim->getData_memory()->sizeMem(); ad++)
-           {
-               out << setw(10) << sim->getData_memory()->readMem(ad) << " ";
-           }
-           interf.answer(out);
+        ostringstream out;
+        for (int ad = 12 * i; ad < 12 * (i + 1) && ad < addr + offset && ad < sim->getData_memory()->sizeMem(); ad++)
+        {
+            out << setw(10) << sim->getData_memory()->readMem(ad) << " ";
+        }
+        interf.answer(out);
     }
     return true; //false si l'adresse ou l'offset sont invalides
 }
@@ -397,13 +404,13 @@ bool Debugger::find_next(const vector<string>& args)
 
 bool Debugger::writeMem(int adresse, int val, int offset)
 {
-    if(adresse <0 || offset < 0)
+    if (adresse < 0 || offset < 0)
     {
         return false;
     }
-    for(int ad= adresse; ad < adresse + offset && ad < sim->getData_memory()->sizeMem();ad++)
+    for (int ad = adresse; ad < adresse + offset && ad < sim->getData_memory()->sizeMem(); ad++)
     {
-        sim->getData_memory()->writeMem(ad, static_cast<int32_t>(val));
+        sim->getData_memory()->writeMem(ad, static_cast<int32_t> (val));
     }
     return true;
 }
@@ -411,11 +418,11 @@ bool Debugger::writeMem(int adresse, int val, int offset)
 bool Debugger::writeReg(int reg, int val)
 {
     int nbReg = sim->getRegisters()->nbRegisters();
-    if(reg == 0 || reg > nbReg)
+    if (reg == 0 || reg > nbReg)
     {
         return false;
     }
-    sim->getRegisters()->writeReg(reg, static_cast<int32_t>(val));
+    sim->getRegisters()->writeReg(reg - 1, static_cast<int32_t> (val));
     return true;
 }
 
@@ -428,17 +435,17 @@ bool Debugger::write(const vector<string>& args)
     }
 
     nbArgs--;
-    
+
     try
     {
 
         if (args[0] == "address")
         {
-            if(nbArgs == 2)
+            if (nbArgs == 2)
             {
                 writeMem(stoi(args[1]), stoi(args[2]));
             }
-            else if(nbArgs == 3)
+            else if (nbArgs == 3)
             {
                 writeMem(stoi(args[1]), stoi(args[2]), stoi(args[3]));
             }
@@ -446,17 +453,36 @@ bool Debugger::write(const vector<string>& args)
             {
                 return errMess.badNumberArgs();
             }
-                
+
         }
         else if (args[0] == "register")
         {
-            if(nbArgs == 2)
+            if (nbArgs == 2)
             {
                 writeReg(stoi(args[1]), stoi(args[2]));
             }
             else
             {
                 return errMess.badNumberArgs();
+            }
+        }
+        else if (args[0] == "port")
+        {
+            if (nbArgs != 3)
+            {
+                return errMess.badNumberArgs();
+            }
+            if (args[1] == "in")
+            {
+
+            }
+            else if (args[1] == "out")
+            {
+
+            }
+            else
+            {
+                return errMess.badArgs();
             }
         }
         else
@@ -472,24 +498,40 @@ bool Debugger::write(const vector<string>& args)
     {
         return errMess.badArgs();
     }
-    
+
     return true;
 }
 
 bool Debugger::step(const vector<string>& args)
 {
-    try 
+    try
     {
         n_instr = stoi(args[0]);
     }
-    catch(const out_of_range& e)
+    catch (const out_of_range& e)
     {
         return errMess.badNumberArgs();
     }
-    catch(const exception& e)
+    catch (const exception& e)
     {
         return errMess.badArgs();
     }
+    return true;
+}
+
+bool Debugger::writePort(int port, int val)
+{
+    //Sauvegarde des valeurs sur les bus
+    int in = sim->getBus_in();
+    int out2 = sim->getBus_out2();
+    //Nouvelles valeurs sur les bus
+    sim->setBus_in(port);
+    sim->setBus_out2(val);
+    //Ecriture
+    sim->getIO()->output();
+    //Restauration des bus
+    sim->setBus_in(in);
+    sim->setBus_out2(out2);
     return true;
 }
 
