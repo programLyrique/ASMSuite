@@ -67,10 +67,10 @@ namespace debugger
          * @param signal
          */
         static void interrupt_handler(int signal);
+        
     private:
         /// Stocker les commandes vers un enum de commandes
         unordered_map<string, command::Command> commands;
-        static bool interrupt;
     };
 
 }

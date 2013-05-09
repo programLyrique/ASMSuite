@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iomanip>
 #include "commandInterface.hpp"
+#include "terminal.hpp"
 
 using namespace std;
 
@@ -11,7 +12,7 @@ namespace debugger
 
 
 Debugger::Debugger(CommandInterface& inter, CPU* cpu) : interf(inter), errMess(inter),
-        sim(cpu), n_instr(1), nb_cycles(0), protect(false)
+        sim(cpu), n_instr(1), nb_cycles(0)
 {
     
     //On attache le debugger à l'interface
@@ -50,7 +51,10 @@ bool Debugger::interact()
     {
         n_instr--;
     }
-    if (breaks || n_instr == 0)
+    
+    //Si point d'arrêt, ou n exécutions, ou interruption par ctrl+c
+    // Un appui à crtl+c ici terminera le programme
+    if (breaks || n_instr == 0 || Terminal::isInterrupted() )
     {
         /*ostringstream outPC;
         outPC << "PC : " << sim->getBus_pc();
@@ -120,6 +124,14 @@ bool Debugger::interact()
             }
         }
     }
+    
+    //Si l'arrêt était dû à crtrl+c, on remet ctrl+c comme interruption du programme
+    // débugué, et pas du debugger
+    if(Terminal::isInterrupted())
+    {
+        Terminal::resetInterrupt();
+    }
+    
     return contDebug;
 }
 
@@ -447,7 +459,7 @@ bool Debugger::write(const vector<string>& args)
             }
             else if (nbArgs == 3)
             {
-                writeMem(stoi(args[1]), stoi(args[2]), stoi(args[3]));
+                writeMem(stoi(args[1]), stoi(args[3]), stoi(args[2]));
             }
             else
             {

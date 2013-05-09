@@ -48,8 +48,6 @@ private:
     //Informations sur l'exécution en cours
     int nb_cycles;
     
-    //Protéger l'exécution du simulateur s'il y a une interruption SIGINT
-    bool protect;
     
     //Tables de hashage pour parser
     unordered_map<string, breakpoint::Breakpoint_t> break_commands;
@@ -191,10 +189,8 @@ public:
         interact();
         while (sim->getBus_inst() != -1 && cont)
         {
-            protect = true;
             sim->run();
             nb_cycles++;
-            protect = false;
             cont = interact();
             
         }
@@ -202,8 +198,6 @@ public:
         
         return cont;
     }
-    
-    bool isProtected(){ return protect;}
     
 };
 

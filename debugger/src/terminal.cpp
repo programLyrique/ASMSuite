@@ -7,7 +7,8 @@ using namespace std;
 
 namespace debugger
 {
-bool Terminal::interrupt = true;
+
+bool CommandInterface::interrupt = false;
 
 Terminal::Terminal()
 {
@@ -24,7 +25,9 @@ Terminal::Terminal()
     commands["find"] = command::SEARCH;
     commands["find-next"] = command::SEARCH_NEXT;
     commands["run"] = command::RUN;
+    commands["r"] = command::RUN;
     commands["next"] = command::NEXT;
+    commands["n"] = command::NEXT;
     commands["step"] = command::STEP;
     commands["exit"] = command::EXIT;
 
@@ -90,12 +93,11 @@ command::Command Terminal::analyseTokens(vector<string> tokens)
 
 void Terminal::interrupt_handler(int signal)
 {
-    if (signal == SIGINT && interrupt)//appui sur ctrl+c
+    if (signal == SIGINT && !CommandInterface::interrupt)//appui sur ctrl+c
     {
         cerr << "\nInterruption du programme." << endl;
-        interrupt = false;
-        
-        //Idée : sauvegarder ?
+        CommandInterface::interrupt = true;
+
     }
     else
     {

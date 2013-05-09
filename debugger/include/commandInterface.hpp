@@ -12,7 +12,6 @@ using namespace std;
 
 namespace debugger
 {
-class Debugger;
 
 /**
  * L'interface par laquelle l'utilisateur interagit avec le debogueur.
@@ -45,13 +44,12 @@ public:
     {
     }
 
-    static void attach_debugger(const Debugger* d)
-    {
-        debug = d;
-    }
+    static bool isInterrupted() { return interrupt;}
+    
+    static void resetInterrupt(){interrupt = false;}
 
 protected:
-    static const Debugger* debug;
+    static bool interrupt;
 
 };
 
