@@ -25,6 +25,7 @@ namespace debugger
         bool unknownSubCommand();
         bool unknownCommand();
         bool noSubCommand();
+        bool notSupported();
         virtual ~ErrorMessages();
     private:
         CommandInterface& inter;

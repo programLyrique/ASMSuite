@@ -10,15 +10,14 @@ using namespace std;
 namespace debugger
 {
 
-
 Debugger::Debugger(CommandInterface& inter, CPU* cpu) : interf(inter), errMess(inter),
-        sim(cpu), n_instr(1), nb_cycles(0)
+sim(cpu), n_instr(1), nb_cycles(0)
 {
-    
+
     //On attache le debugger à l'interface
-    
+
     //CommandInterface:attach_debugger(this);
-    
+
     /*
      * Initialisation des correspondances de sous-commandes pour les points d'arrêt
      */
@@ -51,10 +50,10 @@ bool Debugger::interact()
     {
         n_instr--;
     }
-    
+
     //Si point d'arrêt, ou n exécutions, ou interruption par ctrl+c
     // Un appui à crtl+c ici terminera le programme
-    if (breaks || n_instr == 0 || Terminal::isInterrupted() )
+    if (breaks || n_instr == 0 || Terminal::isInterrupted())
     {
         /*ostringstream outPC;
         outPC << "PC : " << sim->getBus_pc();
@@ -124,14 +123,14 @@ bool Debugger::interact()
             }
         }
     }
-    
+
     //Si l'arrêt était dû à crtrl+c, on remet ctrl+c comme interruption du programme
     // débugué, et pas du debugger
-    if(Terminal::isInterrupted())
+    if (Terminal::isInterrupted())
     {
         Terminal::resetInterrupt();
     }
-    
+
     return contDebug;
 }
 
@@ -285,7 +284,7 @@ bool Debugger::displayAdress(int addr, int offset)
         return false;
     }
     //Affichage 12 lignes par 12 lignes
-    int nbLignes = offset / 12;
+    int nbLignes = offset / 12 + 1;
     for (int i = 0; i < nbLignes; i++)
     {
         ostringstream out;
@@ -486,11 +485,11 @@ bool Debugger::write(const vector<string>& args)
             }
             if (args[1] == "in")
             {
-
+                errMess.notSupported();
             }
             else if (args[1] == "out")
             {
-
+                writePort(stoi(args[2]), stoi(args[3]));
             }
             else
             {

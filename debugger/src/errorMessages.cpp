@@ -45,6 +45,11 @@ bool ErrorMessages::noSubCommand()
     return false;
 }
 
+bool ErrorMessages::notSupported()
+{
+    inter.errorMessage("Commande non supportée.");
+}
+
 ErrorMessages::~ErrorMessages()
 {
 }

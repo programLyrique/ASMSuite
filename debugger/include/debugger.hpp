@@ -160,7 +160,7 @@ public:
      * @param offset décalage,0 par défaut
      * \return false si échec (mauvais paramètres, par exemple)
      */
-    bool writeMem(int adresse, int val, int offset = 0);
+    bool writeMem(int adresse, int val, int offset = 1);
     /**
      * Ecris une valeur dans un registre
      * @param reg
