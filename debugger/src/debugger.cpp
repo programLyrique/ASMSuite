@@ -27,9 +27,11 @@ sim(cpu), n_instr(1), nb_cycles(0)
     break_commands["instr"] = breakpoint::INSTR;
     break_commands["adr"] = breakpoint::ADR;
 
-    //On s'arrête au début.
-    //breakpoints.push_back(new LineBreakpoint(sim, 1));
-
+    //Mise en place d'une recherche sur la mémoire
+    if(cpu != nullptr)
+    {
+          search = new Search( *(sim->getData_memory()));
+    }
 }
 
 bool Debugger::interact()
@@ -94,8 +96,10 @@ bool Debugger::interact()
                 dum(args);
                 break;
             case command::SEARCH:
+                find(args);
                 break;
             case command::SEARCH_NEXT:
+                find_next(args);
                 break;
             case command::WRITE:
                 write(args);
@@ -385,20 +389,35 @@ bool Debugger::dum(const vector<string>& args)
 
 bool Debugger::find(const vector<string>& args)
 {
-    if (args.size() != 1)
+    vector<int32_t>* seq;
+    if (args.size() <   1)
     {
         errMess.badNumberArgs();
     }
     try
     {
-        int32_t* seq = Search::parseSeq(args);
+        seq = Search::parseSeq(args);
     }
     catch (const exception& e)
     {
         errMess.badArgs();
     }
     //Lancer la première recherche
-    return true;
+    search->new_search(seq);
+    int addr = search->find_next();
+    
+    if(addr != -1)
+    {
+        ostringstream out;
+        out << "Concordance à MEM[" << addr << "]";
+        interf.answer(out);
+    }
+    else
+    {
+        interf.answer("Plus de résultats");
+    }
+ 
+    return addr != -1;
 }
 
 bool Debugger::find_next(const vector<string>& args)
@@ -410,7 +429,25 @@ bool Debugger::find_next(const vector<string>& args)
     }
     //Vérifier si une recherche a été lancée.
     //Continuer la recherche
-    return true;
+    if(search->isSearching())
+    {
+        interf.errorMessage("Pas de recherche en cours");
+        return false;
+    }
+    int addr = search->find_next();
+    
+    if(addr != -1)
+    {
+        ostringstream out;
+        out << "Concordance à MEM[" << addr << "]";
+        interf.answer(out);
+    }
+    else
+    {
+        interf.answer("Plus de résultats");
+    }
+    
+    return addr != -1;
 }
 
 bool Debugger::writeMem(int adresse, int val, int offset)

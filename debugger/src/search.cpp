@@ -17,48 +17,65 @@ namespace debugger
     {
     }
 
-    void Search::new_search(int32_t* seq, int size_seq)
+    void Search::new_search(vector<int32_t>* seq)
     {
         current = 0;
         //mettre fin à la taille de la mémoire
-        delete[] this->seq;
+        delete this->seq;
         this->seq = seq;
-        this->size_seq = size_seq;
         search = true;
     }
     
-    void Search::new_search(int32_t* seq, int size_seq, int debut, int offset)
+    void Search::new_search(vector<int32_t>* seq,  int debut, int offset)
     {
         current = debut;
-        fin =debut + offset;
+        fin =debut + offset;//Gérer le cas fin > taille mémoire
         delete[] this->seq;
         this->seq=seq;
-        this->size_seq = size_seq;
         search = true;
     }
     
     int Search::find_next()
     {
         //Mettre search à false si la recherche est finie
-        return current;
+        //Algo trivial. On pourrait utiliser KMP pour aller plus vite
+        
+        bool concord =true;
+        int j = 0;
+        for(int i = current ; i < fin - seq->size(); i++)
+        {
+            j = 0;
+            for(; j < seq->size();j++)
+            {
+                if(mem.readMem(i+j) != (*seq)[j])
+                {
+                    break;
+                }
+            }
+            if(j == seq->size())
+            {
+                return  i;    
+            }
+        }
+        return -1;
     }
 
     Search::~Search()
     {
-        delete[] seq;
+        delete seq;
     }
     
-    int32_t* Search::parseSeq(const std::vector<std::string>& args)
+    vector<int32_t>* Search::parseSeq(const std::vector<std::string>& args)
     {
         int nbNumbers = args.size();
-        int32_t * seq = new int32_t[nbNumbers];
+        vector<int32_t> * seq = new vector<int32_t>(nbNumbers);
         for(int i =0; i < nbNumbers ; i++)
         {
             stringstream conv;
             int32_t nb;
             conv << args[i];
             conv >> nb;
-            seq[i] = nb;
+            (*seq)[i] = nb;
         }
         
         return seq;

@@ -43,7 +43,7 @@ private:
     int n_instr;
 
     //Search search;
-    
+    Search * search;
     
     //Informations sur l'exécution en cours
     int nb_cycles;
@@ -98,10 +98,14 @@ private:
      * @return 
      */
     bool step(const vector<string>& args);
+
     
 public:
+
     /**
-     *
+     * 
+     * @param inter
+     * @param cpu
      */
     Debugger(CommandInterface& inter, CPU* cpu = nullptr);
 
@@ -110,7 +114,9 @@ public:
      */
     void registerSimulator(CPU* s)
     {
+        delete search;
         sim = s;
+        search = new Search( *(sim->getData_memory()));
     }
 
     /**
@@ -176,6 +182,7 @@ public:
      * @return 
      */
     bool writePort(int port, int val);
+    
     virtual ~Debugger();
 
     /**

@@ -34,26 +34,24 @@ public:
     /**
      * Lancer une nouvelle recherche
      * @param seq
-     * @param size_seq
      */
-    void new_search(int32_t* seq, int size_seq);
+    void new_search(std::vector<int32_t>* seq);
     
     /**
      * Lancer une nouvelle recherche limitée à l'intervalle 
      * d'adresse [debut, debut + offset [
      * @param seq
-     * @param size_seq
      * @param debut
      * @param fin
      */
-    void new_search(int32_t* seq, int size_seq, int debut, int offset);
+    void new_search(std::vector<int32_t>* seq, int debut, int offset);
     /**
      * Renvoie la prochaine adresse qui correspond à la séquence
      * @return -1 s'il n'y a plus rien
      */
     int find_next();
     
-    static int32_t* parseSeq(const std::vector<std::string>& args);
+    static std::vector<int32_t>* parseSeq(const std::vector<std::string>& args);
     
     bool isSearching()
     {
@@ -62,8 +60,7 @@ public:
     virtual ~Search();
 private:
     const Memory& mem;
-    std::int32_t* seq;
-    int size_seq;
+    std::vector<int32_t>* seq;
     int current;
     int debut;
     int fin;
