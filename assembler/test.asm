@@ -4,7 +4,8 @@ zero:	3
 5
 
 .CODE
-
+	addi r0 r0 ~(-2**7)
+/*
 start:	add r0, R2, r30			// 0
 	aDDi r5, r7, 3-start+4		// 1
 lbl_1:	and r5, r12, r25 		// 2
@@ -32,7 +33,7 @@ lbl_1:	and r5, r12, r25 		// 2
 lbl_2:	subi r20 r21 123		// 21
 	Xor r22 r23 r24			// 22
 	Xori r25 r26 79+trois-quatre	// 23
-
+*/
 .DATA
 un : 1
 2

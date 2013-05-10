@@ -36,6 +36,11 @@ bool UniLex::CaracFin(wchar_t c) {
   case L':':
   case L'\n':
   case L'%':
+  case L'~':
+  case L'&':
+  case L'|':
+  case L'<':
+  case L'>':
     return true;
     break;
   default:
@@ -73,18 +78,50 @@ void UniLex::Read() {
   case L'*':
     id = FOIS;
     c = fichier->GetNextChar();
+    if (c == L'*') {
+      id = EXP;
+      c = fichier->GetNextChar();
+    }
     break;
   case L'/':
     id = DIV;
     c = fichier->GetNextChar();
     break;
   case L'^':
-    id = EXP;
+    id = OUX;
+    c = fichier->GetNextChar();
+    break;
+  case L'~':
+    id = NON;
+    c = fichier->GetNextChar();
+    break;
+  case L'|':
+    id = OU;
+    c = fichier->GetNextChar();
+    break;
+  case L'&':
+    id = ET;
     c = fichier->GetNextChar();
     break;
   case L'%':
     id = MODULO;
     c = fichier->GetNextChar();
+    break;
+  case L'<':
+    id = UNDEFINED;
+    c = fichier->GetNextChar();
+    if (c == L'<') {
+      id = DECG;
+      c = fichier->GetNextChar();
+    }
+    break;
+  case L'>':
+    id = UNDEFINED;
+    c = fichier->GetNextChar();
+    if (c == L'>') {
+      id = DECD;
+      c = fichier->GetNextChar();
+    }
     break;
   case L'(':
     id = PGAUCHE;

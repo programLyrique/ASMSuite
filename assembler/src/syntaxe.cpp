@@ -5,6 +5,7 @@
 #include "liste.hpp"
 #include "syntaxe.hpp"
 
+/*
 Arbre* Syntaxe::nb() {
 
   Arbre *a;
@@ -150,6 +151,125 @@ Arbre* Syntaxe::expression() {
   }
   return a;
 }
+*/
+
+Arbre* Syntaxe::niv0() {
+  //  std::wcout << "niv 0" << std::endl;
+
+  Arbre *a;
+  switch (lex.GetId()) {
+  case PGAUCHE :
+    lex.Read();
+    a = nivn(7);
+    if (lex.GetId() != PDROITE) {
+      // ERREUR : PDROITE
+      std::wcerr << L"Erreur ligne " << lex.GetLine() << L" colonne " << lex.GetColumn() << L"\u00a0: " << L"')' attendu." << std::endl;
+      err = true;
+    } else lex.Read();
+    break;
+
+  case ID :
+    if (isData) {
+      // ERREUR
+      std::wcerr << L"Erreur ligne " << lex.GetLine() << L" colonne " << lex.GetColumn() << L"\u00a0: " << L"la taille des zones de données ne doivent pas dépendre de labels." << std::endl;
+      err = true;
+      if (lex.GetSymb().GetInit())
+	a = new Arbre(NOMBRE, lex.GetSymb().GetValue(), lex.GetLine(), lex.GetColumn());
+      else 
+	a = new Arbre(UNDEFINED, 0, lex.GetLine(), lex.GetColumn());
+      break;
+    }
+    a = new Arbre(ID, 0, lex.GetLine(), lex.GetColumn());
+    a->SetSymbole(lex.GetSymb());
+    lex.Read();
+    break;
+  case NOMBRE :
+    a = new Arbre(NOMBRE, lex.GetIdbis(), lex.GetLine(), lex.GetColumn());
+    lex.Read();
+    break;
+    
+  case MOINS:
+    a = new Arbre(MOINS, 0, lex.GetLine(), lex.GetColumn());
+    lex.Read();
+    a->SetFilsGauche(new Arbre(NOMBRE, 0, 0, 0)); // car -x = 0-x
+    a->SetFilsDroit(niv0());
+    break;
+
+  case NON:
+    a = new Arbre(NON, 0, lex.GetLine(), lex.GetColumn());
+    lex.Read();
+    a->SetFilsGauche(niv0());
+    break;
+
+  default :
+    err = true;
+    std::wcerr << L"Erreur ligne " << lex.GetLine() << L" colonne " << lex.GetColumn() << L"\u00a0: " << L"nombre attendu." << std::endl;
+    a = new Arbre(UNDEFINED, 0, lex.GetLine(), lex.GetColumn());
+  }
+  return a;
+}
+
+Arbre* Syntaxe::nivnbis(Arbre *prec, int niveau) {
+  Arbre* res; // résultat a envoyer
+  Arbre* suiv; // pour l'associativité à gauche
+  bool b = false;
+  unsigned int t = lex.GetId();
+  //  std::wcout << "niv " << niveau << "'" << std::endl;
+
+  switch(niveau) {
+  case 1:
+    b = (t == EXP);
+    break;
+  case 2:
+    switch (t) {
+    case FOIS:
+    case DIV:
+    case MODULO:
+      b = true;
+    }
+    break;
+  case 3:
+    switch (t) {
+    case PLUS:
+    case MOINS:
+      b = true;
+    }
+    break;
+  case 4:
+    switch (t) {
+    case DECG:
+    case DECD:
+      b = true;
+    }
+    break;
+  case 5:
+    b = (t == ET);
+    break;
+  case 6:
+    b = (t == OUX);
+    break;
+  case 7:
+    b = (t == OU);
+    break;
+  }
+
+  if (b) {
+    lex.Read();
+    suiv = new Arbre(t, 0, lex.GetLine(), lex.GetColumn());
+    suiv->SetFilsGauche(prec);
+    suiv->SetFilsDroit(nivn(niveau-1));
+    res = nivnbis(suiv, niveau);
+  } else res = prec;
+
+  return res;
+}
+
+Arbre* Syntaxe::nivn(int niveau) {
+  //  std::wcout << "niv " << niveau << std::endl;
+  if (niveau == 0) return niv0();
+  Arbre* res = niveau == 1 ? niv0() : nivn(niveau-1); // remonte d'un ordre de priorité.
+  return nivnbis(res, niveau);
+}
 
 void Syntaxe::lignescode() {
   Liste *l;
@@ -197,8 +317,8 @@ void Syntaxe::lignescode() {
       if (t == REGISTRE) {
 	lCurrent->SetReg(i, lex.GetIdbis());
 	lex.Read();
-      } else if (t == PGAUCHE || t == ID || t == NOMBRE) {
-	lCurrent->SetImm(i, expression());
+      } else if (t == PGAUCHE || t == ID || t == NOMBRE || t == MOINS || t == NON) {
+	lCurrent->SetImm(i, nivn(7));
       } else if (t == FIN_LIGNE) break;
     }
     l = new Liste(0,0);
@@ -247,8 +367,10 @@ void Syntaxe::lignesdonnees() {
     break;
 
   case NOMBRE :
+  case MOINS:
+  case NON:
   case PGAUCHE :
-    a = expression();
+    a = nivn(7);
     a->Evaluate();
     if (a->GetType() != UNDEFINED) 
       cData += a->GetValue(); // met à jour le compteur de données.
@@ -430,6 +552,7 @@ int Syntaxe::Read(FILE *in, std::ofstream *out) {
     for (i = 0; i < 3; i++) {
       if (!(lCurrent->GetType(i)) && lCurrent->GetImm(i)) { // si la ième opérande est un arbre non vide
 	lCurrent->GetImm(i)->Evaluate();
+	std::wcout << lCurrent->GetLine() << " : " << lCurrent->GetImm(i)->GetValue() << std::endl;
       }
       if (!(lCurrent->GetType(i) || lCurrent->GetImm(i))) {
 	nb_op = i;

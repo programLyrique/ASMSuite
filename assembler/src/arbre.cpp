@@ -43,7 +43,7 @@ void Arbre::Evaluate() {
       type_noeud = UNDEFINED;
     }
     else {
-      val_noeud = -fils[0]->val_noeud;
+      val_noeud = fils[0]->val_noeud-fils[1]->val_noeud;
     }
     break;
 
@@ -88,6 +88,59 @@ void Arbre::Evaluate() {
     }
     else {
       val_noeud = exp(fils[0]->val_noeud, fils[1]->val_noeud);
+    }
+    break;
+
+  case NON:
+    if (fils[0]->type_noeud == UNDEFINED) {
+      type_noeud = UNDEFINED;
+    }
+    else {
+      val_noeud = ~(fils[0]->val_noeud);
+    }
+    break;
+
+  case OU:
+    if (fils[0]->type_noeud == UNDEFINED || fils[1]->type_noeud == UNDEFINED) {
+      type_noeud = UNDEFINED;
+    }
+    else {
+      val_noeud = fils[0]->val_noeud | fils[1]->val_noeud;
+    }
+    break;
+
+  case ET:
+    if (fils[0]->type_noeud == UNDEFINED || fils[1]->type_noeud == UNDEFINED) {
+      type_noeud = UNDEFINED;
+    }
+    else {
+      val_noeud = fils[0]->val_noeud & fils[1]->val_noeud;
+    }
+    break;
+
+  case OUX:
+    if (fils[0]->type_noeud == UNDEFINED || fils[1]->type_noeud == UNDEFINED) {
+      type_noeud = UNDEFINED;
+    }
+    else {
+      val_noeud = fils[0]->val_noeud ^ fils[1]->val_noeud;
+    }
+    break;
+  case DECG:
+    if (fils[0]->type_noeud == UNDEFINED || fils[1]->type_noeud == UNDEFINED) {
+      type_noeud = UNDEFINED;
+    }
+    else {
+      val_noeud = fils[0]->val_noeud << fils[1]->val_noeud;
+    }
+    break;
+
+  case DECD:
+    if (fils[0]->type_noeud == UNDEFINED || fils[1]->type_noeud == UNDEFINED) {
+      type_noeud = UNDEFINED;
+    }
+    else {
+      val_noeud = fils[0]->val_noeud >> fils[1]->val_noeud;
     }
     break;
   }
