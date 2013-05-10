@@ -6,6 +6,7 @@
 #include <string>
 #include <sstream>
 #include <unordered_map>
+#include <csignal>
 
 #include "debugger.hpp"
 #include "command.hpp"
@@ -30,7 +31,7 @@ namespace debugger
          * \arg args sera rempli avec les arguments de la commande
          * \return le type de la commande
          */
-        enum command::Command prompt(vector<string>& args);
+        enum command::Command prompt(int nb_cycles, int pc, vector<string>& args);
         /**
          * Analyse les composantes de la commande 
          * et fait l'action correspondante.
@@ -60,10 +61,16 @@ namespace debugger
         virtual ~Terminal()
         {
         }
+        
+        /**
+         * Pour intercepter ctrl+c (mais une seule fois)
+         * @param signal
+         */
+        static void interrupt_handler(int signal);
+        
     private:
         /// Stocker les commandes vers un enum de commandes
         unordered_map<string, command::Command> commands;
-
     };
 
 }

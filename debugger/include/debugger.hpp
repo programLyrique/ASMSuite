@@ -38,9 +38,18 @@ private:
     ErrorMessages errMess;
 
     vector<Breakpoint*> breakpoints;
+    
+    //nombre d'instructions à exécuter; -1 si non défini
+    int n_instr;
 
     //Search search;
-
+    
+    
+    //Informations sur l'exécution en cours
+    int nb_cycles;
+    
+    
+    //Tables de hashage pour parser
     unordered_map<string, breakpoint::Breakpoint_t> break_commands;
 
     /* Méthodes pour parser les arguments des commandes*/
@@ -83,11 +92,17 @@ private:
      * @return 
      */
     bool write(const vector<string>& args);
+    /**
+     * Avancer de n instructions le programme
+     * @param args
+     * @return 
+     */
+    bool step(const vector<string>& args);
+    
 public:
     /**
      *
      */
-
     Debugger(CommandInterface& inter, CPU* cpu = nullptr);
 
     /**
@@ -153,6 +168,14 @@ public:
      * \return false si échec
      */
     bool writeReg(int reg, int val);
+    
+    /**
+     * Ecrire une valeur dans un port.
+     * @param port
+     * @param val
+     * @return 
+     */
+    bool writePort(int port, int val);
     virtual ~Debugger();
 
     /**
@@ -162,9 +185,12 @@ public:
     bool debug()
     {
         bool cont = true;
+        n_instr=1;//Permet d'arrêter le debugger juste avant la première instruction
+        interact();
         while (sim->getBus_inst() != -1 && cont)
         {
             sim->run();
+            nb_cycles++;
             cont = interact();
             
         }
@@ -172,7 +198,7 @@ public:
         
         return cont;
     }
-
+    
 };
 
 
