@@ -29,6 +29,7 @@ Terminal::Terminal()
     commands["next"] = command::NEXT;
     commands["n"] = command::NEXT;
     commands["step"] = command::STEP;
+    commands["help"] = command::HELP;
     commands["exit"] = command::EXIT;
 
     //Mise en place du gestionnaire d'interruption

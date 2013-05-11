@@ -38,7 +38,7 @@ namespace debugger
     int Search::find_next()
     {
         //Mettre search à false si la recherche est finie
-        //Algo trivial. On pourrait utiliser KMP pour aller plus vite
+        //Algo naïf. On pourrait utiliser KMP pour aller plus vite
         
         int j = 0;
         current++;

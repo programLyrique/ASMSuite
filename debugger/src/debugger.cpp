@@ -121,6 +121,9 @@ bool Debugger::interact()
                 step(args);
                 cont = false;
                 break;
+            case command::HELP:
+                errMess.notSupported();
+                break;
             default:
                 errMess.unknownCommand();
                 break;
