@@ -31,12 +31,22 @@ void CPU::read_program(char* filename)
     fclose(bin_file);
 }
 
-void CPU::run()
+void CPU::cycle()
 {
 
     control_unit->read_inst();
     control_unit->decode_inst();
     control_unit->execute_inst();
 
+}
+
+void CPU::run()
+{
+
+    while (getBus_inst() != -1)
+    {
+        cycle();
+
+    }
 }
 

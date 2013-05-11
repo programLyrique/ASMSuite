@@ -39,9 +39,11 @@ public:
 
     void read_program(char* filename);
 
-    void run(); // exécute le programme
+    /// exécute le programme
+    void run(); 
 
-    void run_debug(); //Exécute le programme en mode debug
+    ///Exécute un cyle
+    void cycle();
 
     Memory* getDataMemory() const
     {
