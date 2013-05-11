@@ -2,7 +2,7 @@ Usage du compilateur : ./main code_source code_binaire
 
 Le langage est insensible à la casse, sauf pour les noms de labels (définis par l'utilisateur).
 Les commentaires sont sensables à ceux du C.
-Les expressions arithmétiques acceptent les opérateurs suivants : +*/- ^(exponentielle) %(modulo), ainsi que des parenthèses.
+Les expressions arithmétiques acceptent les opérateurs suivants : +*/- **(exponentielle) %(modulo), ^(XOR), ~(NOT), &, |(OR), <<, >>, ainsi que des parenthèses.
 
 Le code est divisé en deux types de sections : les sections de données (précédées par ".DATA" ou ".BSS") et les sections de code (précédées par ".CODE"). On peut créer autant de sections que l'on veut, dans l'ordre que l'on veut.
 

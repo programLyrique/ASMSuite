@@ -17,11 +17,15 @@ private :
   bool isData; // pour savoir si les expressions acceptent des symboles ou pas.
   bool err; // true s'il y a eu une erreur.
 
-  Arbre *nb(); // fonctions intermédiaires
+  /*  Arbre *nb(); // fonctions intermédiaires
   Arbre *e();
   Arbre *d();
   Arbre *fm();
-  Arbre *expression(); // transforme une expression en arbre
+  Arbre *expression(); // transforme une expression en arbre*/
+
+  Arbre* niv0();
+  Arbre* nivn(int);
+  Arbre* nivnbis(Arbre*, int);
 
   void lignecode();
   void lignesdonnees();
