@@ -13,8 +13,8 @@ ou moins liés.
 Utilisation
 -----------
 
-`assembler fichier.asm fichier.out`
-`debugger fichier.out [fichier.log]`
+* `assembler fichier.asm fichier.out`
+* `debugger fichier.out [fichier.log]`
 
 Plus d'informations dans les README des programmes.
 
@@ -27,8 +27,8 @@ Compilation
 
 ### Compilation d'un programme particulier
 
-`cd debugger #ou assembler ou simulator`
-`make`
+* `cd debugger #ou assembler ou simulator`
+* `make`
 
 ### Dépendances et prérequis
 
