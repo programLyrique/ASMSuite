@@ -196,7 +196,7 @@ public:
         interact();
         while (sim->getBus_inst() != -1 && cont)
         {
-            sim->run();
+            sim->cycle();
             nb_cycles++;
             cont = interact();
             

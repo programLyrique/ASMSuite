@@ -429,7 +429,7 @@ bool Debugger::find_next(const vector<string>& args)
     }
     //Vérifier si une recherche a été lancée.
     //Continuer la recherche
-    if(search->isSearching())
+    if(!search->isSearching())
     {
         interf.errorMessage("Pas de recherche en cours");
         return false;

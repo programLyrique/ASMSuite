@@ -13,13 +13,13 @@ using namespace std;
 namespace debugger
 {
 
-    Search::Search(Memory& mem) : mem(mem), current(0)
+    Search::Search(Memory& mem) : mem(mem), current(0), search(false)
     {
     }
 
     void Search::new_search(vector<int32_t>* seq)
     {
-        current = 0;
+        current = -1;
         //mettre fin à la taille de la mémoire
         delete this->seq;
         this->seq = seq;
@@ -28,7 +28,7 @@ namespace debugger
     
     void Search::new_search(vector<int32_t>* seq,  int debut, int offset)
     {
-        current = debut;
+        current = debut - 1;
         fin =debut + offset;//Gérer le cas fin > taille mémoire
         delete[] this->seq;
         this->seq=seq;
@@ -40,9 +40,9 @@ namespace debugger
         //Mettre search à false si la recherche est finie
         //Algo trivial. On pourrait utiliser KMP pour aller plus vite
         
-        bool concord =true;
         int j = 0;
-        for(int i = current ; i < fin - seq->size(); i++)
+        current++;
+        for(int i = current  ; i < fin - seq->size(); i++)
         {
             j = 0;
             for(; j < seq->size();j++)
