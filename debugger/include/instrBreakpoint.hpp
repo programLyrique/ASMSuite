@@ -10,6 +10,7 @@
 
 #include "breakpoint.hpp"
 #include <string>
+#include <unordered_map>
 
 namespace debugger
 {

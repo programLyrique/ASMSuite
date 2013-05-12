@@ -94,7 +94,7 @@ void Control_unit::execute_IO_op()
 
 void Control_unit::jump_instruction()
 {
-    if (op_code == JMP)
+    if (op_code == JMP_I)
     {
         r1 = 0;
         r2 = 0;
@@ -109,7 +109,7 @@ void Control_unit::jump_instruction()
     {
         read_registers();
         execute_ALU_op();
-        if ((op_code == JRS && *flag_p) || (op_code == JRE && *flag_z))
+        if ((op_code == JRS_I && *flag_p) || (op_code == JRE_I && *flag_z))
         {
             *pc += addr11;
         }

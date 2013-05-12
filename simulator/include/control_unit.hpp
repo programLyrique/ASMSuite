@@ -27,9 +27,9 @@ enum INST_TYPE
 };
 }
 
-#define JMP 0
-#define JRS 1
-#define JRE 4
+#define JMP_I 0
+#define JRS_I 1
+#define JRE_I 4
 
 const int32_t mask_inst = 3;
 const int32_t mask_op = 7;
