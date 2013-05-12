@@ -35,6 +35,8 @@ public:
     Memory(int32_t* _addr, int32_t* _in, int32_t* _out);
     void load();
     void store();
+    
+    virtual ~Memory();
 
     /**
      * Interface de lecture avec le debugger

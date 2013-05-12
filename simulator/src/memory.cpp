@@ -6,7 +6,7 @@ Memory::Memory(int32_t* _addr, int32_t* _in, int32_t* _out)
     addr = _addr;
     in = _in;
     out = _out;
-    for (int i = 0; i < 65536; i++) memory[i] = 0;
+    for (int i = 0; i < 65536; i++) memory[i] = nullptr;
 }
 
 void Memory::load ()
@@ -31,3 +31,8 @@ void Memory::store ()
   memory[cluster][*addr & 0xFFFF] = *in;
 }
 
+Memory::~Memory()
+{
+    //Libérer tous les clusters utilisés
+    //for(int )
+}

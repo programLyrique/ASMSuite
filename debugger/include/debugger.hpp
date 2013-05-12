@@ -72,7 +72,7 @@ private:
      * @param args
      * @return 
      */
-    bool dum(const vector<string>& args);
+    bool dump(const vector<string>& args);
     /**
      * Lance une recherche et renvoie le premier résultat
      * @param args

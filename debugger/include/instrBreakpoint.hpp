@@ -17,16 +17,28 @@ namespace debugger
     class InstrBreakpoint : public Breakpoint
     {
     public:
+        InstrBreakpoint(const Control_unit& cont, string instr);
         /**
-         * \todo Utiliser l'enum des opcodes (ou define ) du simulateur
+         * Breakpoint on a opcode of a type of instruciton (mem, io, alu...)
+         * @param type type of the instruction (\see control_unit.hpp)
+         * @param opcode type of the opcode
          */
-        InstrBreakpoint(string instr);
+        InstrBreakpoint(const Control_unit& cont, inst_type::INST_TYPE type, int opcode);
+        /**
+         * Breakpoint on a type of instruction
+         * @param type
+         * @return 
+         */
+        InstrBreakpoint(const Control_unit& cont, inst_type::INST_TYPE type);
         InstrBreakpoint(const InstrBreakpoint& orig);
         
         bool isBreak();
         virtual ~InstrBreakpoint();
     private:
-        string instr;
+        const Control_unit& cont;
+        inst_type::INST_TYPE type;
+        int opcode;
+        bool ignoreOpcode;
     };
 
 }

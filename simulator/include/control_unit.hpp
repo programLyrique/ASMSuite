@@ -79,7 +79,7 @@ public:
     void execute_IO_op();
     void write_registers();
 
-    /*
+    /**
      * Prerequisite : pc and inst are the addr and out field of the
      * program memory. imm_bus is one of the two "input" buses. The flag
      * as correctly linked to the ALU.
@@ -103,6 +103,19 @@ public:
     }
     void execute_program();
     
+    /**
+     * 
+     * @return type of the inst
+     */
+    inst_type::INST_TYPE getInst_type() const
+    {
+        return static_cast<inst_type::INST_TYPE>((*inst >> 30) & mask_inst);
+    }
+    
+    int getOpcode() const
+    {
+        return (*inst >> 27) & mask_op;
+    }
     
 };
 #endif

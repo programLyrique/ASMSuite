@@ -9,6 +9,7 @@
 #define	BREAKPOINT_HPP
 
 #include <string>
+#include "control_unit.hpp"
 
 class CPU;//en attendant l'include du simulateur
 
@@ -39,8 +40,6 @@ namespace debugger
         virtual bool isBreak() = 0;
 
         virtual ~Breakpoint() {};
-    private:
-        CPU* cpu;
     };
 
 }

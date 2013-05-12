@@ -204,18 +204,18 @@ Breakpoint* Debugger::addBreakpoint(const vector<string>& args)
             }
             break;
         case breakpoint::INSTR:
-            breakpoint = new InstrBreakpoint(args[1]);
+            breakpoint = new InstrBreakpoint(*(sim->getControl_unit()), args[1]);
             break;
         case breakpoint::ADR:
             if (nbArgs == 1)
             {
                 int adr = stoi(args[1]);
-                breakpoint = new AdrBreakpoint(adr, adr);
+                breakpoint = new AdrBreakpoint(*sim, adr, adr+1);
 
             }
             else if (nbArgs == 2)
             {
-                breakpoint = new AdrBreakpoint(stoi(args[1]), stoi(args[2]));
+                breakpoint = new AdrBreakpoint(*sim, stoi(args[1]), stoi(args[2]));
             }
             else
             {

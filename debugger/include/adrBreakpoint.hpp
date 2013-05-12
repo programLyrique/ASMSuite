@@ -8,8 +8,8 @@
 #ifndef ADRRBREAKPOINT_HPP
 #define	ADRRBREAKPOINT_HPP
 
-#include "breakpoint.hpp"
-
+#include "instrBreakpoint.hpp"
+#include "cpu.hpp"
 
 namespace debugger
 {
@@ -18,16 +18,16 @@ namespace debugger
      * Breakpoint sur une adresse mémoire
      * @param orig
      */
-    class AdrBreakpoint : public Breakpoint
+    class AdrBreakpoint : public InstrBreakpoint
     {
     public:
-        AdrBreakpoint(int addr, int offset);
-        AdrBreakpoint(const AdrBreakpoint& orig);
+        AdrBreakpoint(const CPU& cpu,int addr, int offset);
         bool isBreak();
         virtual ~AdrBreakpoint();
     private:
-        int adr;
+        int addr;
         int offset;
+        const CPU& cpu;
     };
 
 }

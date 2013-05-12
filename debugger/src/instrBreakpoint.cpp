@@ -10,17 +10,26 @@
 namespace debugger
 {
 
-    InstrBreakpoint::InstrBreakpoint(string instr) : instr(instr)
+    InstrBreakpoint::InstrBreakpoint(const Control_unit& cont, string instr) :
+    cont(cont)
     {
+    }
+    
+    InstrBreakpoint::InstrBreakpoint(const Control_unit& cont, inst_type::INST_TYPE type) : 
+        cont(cont), type(type), opcode(-1), ignoreOpcode(true)
+    {
+        
+    }
+    
+    InstrBreakpoint::InstrBreakpoint(const Control_unit& cont, inst_type::INST_TYPE type, int opcode) : 
+        cont(cont), type(type), opcode(opcode), ignoreOpcode(false)
+    {
+        
     }
 
     bool InstrBreakpoint::isBreak()
     {
-        return true;
-    }
-
-    InstrBreakpoint::InstrBreakpoint(const InstrBreakpoint& orig)
-    {
+        return cont.getInst_type() == type && (ignoreOpcode || cont.getOpcode() == opcode);
     }
 
     InstrBreakpoint::~InstrBreakpoint()

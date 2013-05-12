@@ -5,22 +5,28 @@
  * Created on 6 mai 2013, 00:10
  */
 
+#include "instrBreakpoint.hpp"
 #include "adrBreakpoint.hpp"
 
 namespace debugger
 {
 
-    AdrBreakpoint::AdrBreakpoint(int adr, int offset) : adr(adr), offset(offset)
+    AdrBreakpoint::AdrBreakpoint(const CPU& cpu, int addr, int offset) : 
+        InstrBreakpoint(*(cpu.getControl_unit()), inst_type::MEM_INST),
+        cpu(cpu), addr(addr), offset(offset)
     {
     }
 
-    AdrBreakpoint::AdrBreakpoint(const AdrBreakpoint& orig)
-    {
-    }
 
     bool AdrBreakpoint::isBreak()
     {
-        return true;
+        //Si oui, on regarde les addresse en question
+        if(InstrBreakpoint::isBreak())
+        {
+            int address = cpu.getBus_out1();
+            return address >= addr && address < addr+offset;
+        }
+        return false;
     }
     
     AdrBreakpoint::~AdrBreakpoint()
