@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <iomanip>
+#include <fstream>
+
 #include "commandInterface.hpp"
 #include "terminal.hpp"
 
@@ -93,7 +95,7 @@ bool Debugger::interact()
                 interf.answer(out);
                 break;
             case command::DUMP:
-                dum(args);
+                dump(args);
                 break;
             case command::SEARCH:
                 find(args);
@@ -295,7 +297,7 @@ bool Debugger::displayAdress(int addr, int offset)
     for (int i = 0; i < nbLignes; i++)
     {
         ostringstream out;
-        for (int ad = 12 * i; ad < 12 * (i + 1) && ad < addr + offset && ad < sim->getData_memory()->sizeMem(); ad++)
+        for (int ad = addr + 12 * i; ad < addr+ 12 * (i + 1) && ad < addr + offset && ad < sim->getData_memory()->sizeMem(); ad++)
         {
             out << setw(10) << sim->getData_memory()->readMem(ad) << " ";
         }
@@ -306,9 +308,31 @@ bool Debugger::displayAdress(int addr, int offset)
 
 bool Debugger::dumpMem(int addr, int offset, const string& fileName)
 {
-    //ostream file(fileName);
+    ostringstream out;
+    out << "Sauvegarde de la plage mémoire dans le fichier " <<  fileName;
 
-    interf.answer("Sauvegarde de la plage mémoire dans le fichier.");
+    const int size_buf = 128;
+    char buffer[sizeof(int32_t) * size_buf];
+    
+    ofstream file(fileName, ofstream::binary | ofstream::trunc);
+    
+    for(int ad = addr; ad < addr + offset;ad+= size_buf)
+    {
+        int j = 0;
+        for(; j < size_buf && ad + j  <  addr + offset ; j++)
+        {
+            int32_t word = sim->getData_memory()->readMem(ad+j);
+            //séparation de l'int en octets
+            for(int k = 0 ; k < sizeof(int32_t); k++)
+            {
+                buffer[sizeof(int32_t) * j+k] = (word >> (sizeof(int32_t) - k) * 8) & 0xFF;//big endian supposé
+            }
+        }
+        //Ecriture du buffer
+        file.write(buffer, j * sizeof(int32_t));
+    }
+    file.close();
+    interf.answer(out);
     return true; //false si l'adresse ou l'offset sont invalides
 }
 
@@ -368,7 +392,7 @@ bool Debugger::display(const vector<string>& args)
     return true;
 }
 
-bool Debugger::dum(const vector<string>& args)
+bool Debugger::dump(const vector<string>& args)
 {
     if (args.size() != 3)
     {
