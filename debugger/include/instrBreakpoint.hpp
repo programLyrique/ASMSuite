@@ -18,7 +18,6 @@ namespace debugger
     class InstrBreakpoint : public Breakpoint
     {
     public:
-        InstrBreakpoint(const Control_unit& cont, string instr);
         /**
          * Breakpoint on a opcode of a type of instruciton (mem, io, alu...)
          * @param type type of the instruction (\see control_unit.hpp)

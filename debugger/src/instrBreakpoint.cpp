@@ -9,11 +9,6 @@
 
 namespace debugger
 {
-
-    InstrBreakpoint::InstrBreakpoint(const Control_unit& cont, string instr) :
-    cont(cont)
-    {
-    }
     
     InstrBreakpoint::InstrBreakpoint(const Control_unit& cont, inst_type::INST_TYPE type) : 
         cont(cont), type(type), opcode(-1), ignoreOpcode(true)

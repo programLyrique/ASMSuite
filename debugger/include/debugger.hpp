@@ -15,6 +15,7 @@
 #include "breakpoint.hpp"
 #include "search.hpp"
 #include "errorMessages.hpp"
+#include "dissassembler.hpp"
 
 namespace debugger
 {
@@ -48,6 +49,8 @@ private:
     //Informations sur l'exécution en cours
     int nb_cycles;
     
+    //Correspondances instructions <-> codage
+    Dissassembler dis;
     
     //Tables de hashage pour parser
     unordered_map<string, breakpoint::Breakpoint_t> break_commands;

@@ -204,7 +204,7 @@ Breakpoint* Debugger::addBreakpoint(const vector<string>& args)
             }
             break;
         case breakpoint::INSTR:
-            breakpoint = new InstrBreakpoint(*(sim->getControl_unit()), args[1]);
+            breakpoint = new InstrBreakpoint(*(sim->getControl_unit()), dis.getInst_type(args[1]), dis.getOpcode(args[1]));
             break;
         case breakpoint::ADR:
             if (nbArgs == 1)
