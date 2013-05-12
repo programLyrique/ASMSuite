@@ -33,6 +33,8 @@ namespace debugger
         InstrBreakpoint(const InstrBreakpoint& orig);
         
         bool isBreak();
+        
+        string describe();
         virtual ~InstrBreakpoint();
     private:
         const Control_unit& cont;

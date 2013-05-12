@@ -36,6 +36,8 @@ enum Command
     NEXT,
     STEP,
     HELP,
+    INFO,
+    CLEAR,
     EXIT
 };
 }

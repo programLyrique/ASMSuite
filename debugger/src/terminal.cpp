@@ -25,11 +25,15 @@ Terminal::Terminal()
     commands["find"] = command::SEARCH;
     commands["find-next"] = command::SEARCH_NEXT;
     commands["run"] = command::RUN;
+    commands["continue"] = command::RUN;
+    commands["c"] = command::RUN;
     commands["r"] = command::RUN;
     commands["next"] = command::NEXT;
     commands["n"] = command::NEXT;
     commands["step"] = command::STEP;
     commands["help"] = command::HELP;
+    commands["info"] = command::INFO;
+    commands["clear"] = command::CLEAR;
     commands["exit"] = command::EXIT;
 
     //Mise en place du gestionnaire d'interruption

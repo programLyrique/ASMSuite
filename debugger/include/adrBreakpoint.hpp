@@ -23,6 +23,7 @@ namespace debugger
     public:
         AdrBreakpoint(const CPU& cpu,int addr, int offset);
         bool isBreak();
+        string describe();
         virtual ~AdrBreakpoint();
     private:
         int addr;

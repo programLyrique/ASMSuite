@@ -25,6 +25,13 @@ namespace debugger
         return cpu->getBus_pc() == static_cast<int32_t>(line);
     }
     
+    string LineBreakpoint::describe()
+    {
+        ostringstream out;
+        out << "Line " << line;
+        return out.str();
+    }
+    
     LineBreakpoint::~LineBreakpoint()
     {
     }

@@ -63,6 +63,20 @@ private:
      * @return null if the breakpoint is invalid
      */
     Breakpoint* addBreakpoint(const vector<string>& args);
+    
+    /**
+     * Affiche des infos sur l'état interne du debugger (par exemple, les points d'arrêt)
+     * @param args
+     * @return 
+     */
+    bool info(const vector<string>& args);
+    
+    /**
+     * 
+     * @param args
+     * @return 
+     */
+    bool clear(const vector<string>& args);
 
     /**
      * Affiche les informations demandées
@@ -127,7 +141,7 @@ public:
      * informations demandées, inspecte le simulateur.
      * @return false si le simulateur doit être arrêté.
      */
-    bool interact();
+    virtual bool interact();
 
     //Méthodes d'affichage
     /**
@@ -187,6 +201,18 @@ public:
     bool writePort(int port, int val);
     
     virtual ~Debugger();
+    
+    /**
+     * Adds a breakpoint !
+     * @param breakpoint
+     */
+    void addBreakpoint(Breakpoint* breakpoint);
+    
+    /**
+     *
+     * @param num
+     */
+    void clearBreakpoint(int num);
 
     /**
      * Lance le programme voulu en mode debug

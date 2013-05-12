@@ -30,6 +30,17 @@ namespace debugger
     InstrBreakpoint::~InstrBreakpoint()
     {
     }
+    
+    string InstrBreakpoint::describe()
+    {
+        ostringstream out;
+        out << "Instr type = " << type << " ; opcode ? " << (! ignoreOpcode);
+        if(!ignoreOpcode)
+        {
+            out << " opcode = " << opcode;
+        }
+        return out.str();
+    }
 
 }
 

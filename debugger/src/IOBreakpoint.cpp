@@ -22,6 +22,13 @@ namespace debugger
     {
         return true;
     }
+    
+    string IOBreakpoint::describe()
+    {
+        ostringstream out;
+        out << "IO port = " << port << " type  = " << type << " val = " << val;
+        return out.str();
+    }
 
     IOBreakpoint::~IOBreakpoint()
     {

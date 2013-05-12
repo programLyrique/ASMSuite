@@ -24,6 +24,7 @@ namespace debugger
         LineBreakpoint(CPU* cpu, int line);
         LineBreakpoint(const LineBreakpoint& orig);
         bool isBreak();
+        string describe();
         virtual ~LineBreakpoint();
     private:
         int line;

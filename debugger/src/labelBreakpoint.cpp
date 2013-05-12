@@ -22,6 +22,12 @@ namespace debugger
     {
         return true;
     }
+    
+    string LabelBreakpoint::describe()
+    {
+        string des("Label ");
+        return des + label;
+    }
 
     LabelBreakpoint::~LabelBreakpoint()
     {

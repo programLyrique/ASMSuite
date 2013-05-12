@@ -9,6 +9,7 @@
 #define	BREAKPOINT_HPP
 
 #include <string>
+#include <sstream>
 #include "control_unit.hpp"
 
 class CPU;//en attendant l'include du simulateur
@@ -38,6 +39,12 @@ namespace debugger
          * @return 
          */
         virtual bool isBreak() = 0;
+        
+        /**
+         * Describes the breakpoint
+         * @return 
+         */
+        virtual string describe() = 0;
 
         virtual ~Breakpoint() {};
     };

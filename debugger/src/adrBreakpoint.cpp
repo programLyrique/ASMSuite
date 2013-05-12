@@ -29,6 +29,13 @@ namespace debugger
         return false;
     }
     
+    string AdrBreakpoint::describe()
+    {
+        ostringstream out;
+        out << "MEM[" << addr << "..." << (addr+ offset) << "[";
+        return out.str();
+    }
+    
     AdrBreakpoint::~AdrBreakpoint()
     {
     }

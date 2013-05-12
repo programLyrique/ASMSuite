@@ -21,6 +21,7 @@ namespace debugger
         LabelBreakpoint(string label);
         LabelBreakpoint(const LabelBreakpoint& orig);
         bool isBreak();
+        string describe();
         virtual ~LabelBreakpoint();
     private:
         string label;

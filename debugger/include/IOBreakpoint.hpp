@@ -43,6 +43,7 @@ namespace debugger
         IOBreakpoint(int port, io_breakpoint::Type type = io_breakpoint::IO, int val = 0);
         IOBreakpoint(const IOBreakpoint& orig);
         bool isBreak();
+        string describe();
         virtual ~IOBreakpoint();
 
     private:

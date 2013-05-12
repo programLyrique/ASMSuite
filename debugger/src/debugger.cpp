@@ -30,9 +30,9 @@ sim(cpu), n_instr(1), nb_cycles(0)
     break_commands["adr"] = breakpoint::ADR;
 
     //Mise en place d'une recherche sur la mémoire
-    if(cpu != nullptr)
+    if (cpu != nullptr)
     {
-          search = new Search( *(sim->getData_memory()));
+        search = new Search(*(sim->getData_memory()));
     }
 }
 
@@ -79,7 +79,7 @@ bool Debugger::interact()
             case command::BREAKPOINT:
                 if ((breakpoint = addBreakpoint(args)) != nullptr)
                 {
-                    breakpoints.push_back(breakpoint);
+                    addBreakpoint(breakpoint);
                 }
                 //addBreakpoint se charge d'indiquer les erreurs
                 n_instr = 0; //On remet le compteur de suivi d'exécution à 0
@@ -125,6 +125,12 @@ bool Debugger::interact()
                 break;
             case command::HELP:
                 errMess.notSupported();
+                break;
+            case command::INFO:
+                info(args);
+                break;
+            case command::CLEAR:
+                clear(args);
                 break;
             default:
                 errMess.unknownCommand();
@@ -210,7 +216,7 @@ Breakpoint* Debugger::addBreakpoint(const vector<string>& args)
             if (nbArgs == 1)
             {
                 int adr = stoi(args[1]);
-                breakpoint = new AdrBreakpoint(*sim, adr, adr+1);
+                breakpoint = new AdrBreakpoint(*sim, adr, adr + 1);
 
             }
             else if (nbArgs == 2)
@@ -297,7 +303,7 @@ bool Debugger::displayAdress(int addr, int offset)
     for (int i = 0; i < nbLignes; i++)
     {
         ostringstream out;
-        for (int ad = addr + 12 * i; ad < addr+ 12 * (i + 1) && ad < addr + offset && ad < sim->getData_memory()->sizeMem(); ad++)
+        for (int ad = addr + 12 * i; ad < addr + 12 * (i + 1) && ad < addr + offset && ad < sim->getData_memory()->sizeMem(); ad++)
         {
             out << setw(10) << sim->getData_memory()->readMem(ad) << " ";
         }
@@ -309,27 +315,27 @@ bool Debugger::displayAdress(int addr, int offset)
 bool Debugger::dumpMem(int addr, int offset, const string& fileName)
 {
     ostringstream out;
-    out << "Sauvegarde de la plage mémoire dans le fichier " <<  fileName;
+    out << "Sauvegarde de la plage mémoire dans le fichier " << fileName;
 
     const int size_buf = 128;
-    char buffer[sizeof(int32_t) * size_buf];
-    
+    char buffer[sizeof (int32_t) * size_buf];
+
     ofstream file(fileName, ofstream::binary | ofstream::trunc);
-    
-    for(int ad = addr; ad < addr + offset;ad+= size_buf)
+
+    for (int ad = addr; ad < addr + offset; ad += size_buf)
     {
         int j = 0;
-        for(; j < size_buf && ad + j  <  addr + offset ; j++)
+        for (; j < size_buf && ad + j < addr + offset; j++)
         {
-            int32_t word = sim->getData_memory()->readMem(ad+j);
+            int32_t word = sim->getData_memory()->readMem(ad + j);
             //séparation de l'int en octets
-            for(int k = 0 ; k < sizeof(int32_t); k++)
+            for (int k = 0; k < sizeof (int32_t); k++)
             {
-                buffer[sizeof(int32_t) * j+k] = (word >> (sizeof(int32_t) - k) * 8) & 0xFF;//big endian supposé
+                buffer[sizeof (int32_t) * j + k] = (word >> (sizeof (int32_t) - k) * 8) & 0xFF; //big endian supposé
             }
         }
         //Ecriture du buffer
-        file.write(buffer, j * sizeof(int32_t));
+        file.write(buffer, j * sizeof (int32_t));
     }
     file.close();
     interf.answer(out);
@@ -417,7 +423,7 @@ bool Debugger::dump(const vector<string>& args)
 bool Debugger::find(const vector<string>& args)
 {
     vector<int32_t>* seq;
-    if (args.size() <   1)
+    if (args.size() < 1)
     {
         errMess.badNumberArgs();
     }
@@ -432,8 +438,8 @@ bool Debugger::find(const vector<string>& args)
     //Lancer la première recherche
     search->new_search(seq);
     int addr = search->find_next();
-    
-    if(addr != -1)
+
+    if (addr != -1)
     {
         ostringstream out;
         out << "Concordance à MEM[" << addr << "]";
@@ -443,7 +449,7 @@ bool Debugger::find(const vector<string>& args)
     {
         interf.answer("Plus de résultats");
     }
- 
+
     return addr != -1;
 }
 
@@ -456,14 +462,14 @@ bool Debugger::find_next(const vector<string>& args)
     }
     //Vérifier si une recherche a été lancée.
     //Continuer la recherche
-    if(!search->isSearching())
+    if (!search->isSearching())
     {
         interf.errorMessage("Pas de recherche en cours");
         return false;
     }
     int addr = search->find_next();
-    
-    if(addr != -1)
+
+    if (addr != -1)
     {
         ostringstream out;
         out << "Concordance à MEM[" << addr << "]";
@@ -473,7 +479,7 @@ bool Debugger::find_next(const vector<string>& args)
     {
         interf.answer("Plus de résultats");
     }
-    
+
     return addr != -1;
 }
 
@@ -607,6 +613,59 @@ bool Debugger::writePort(int port, int val)
     //Restauration des bus
     sim->setBus_in(in);
     sim->setBus_out2(out2);
+    return true;
+}
+
+void Debugger::addBreakpoint(Breakpoint* breakpoint)
+{
+    breakpoints.push_back(breakpoint);
+}
+
+
+void Debugger::clearBreakpoint(int num)
+{
+    breakpoints.erase(breakpoints.begin() + num);
+}
+
+bool Debugger::info(const vector<string>& args)
+{
+    if(args.size() != 1)
+    {
+        return errMess.badNumberArgs();
+    }
+    
+    if(args[0] == "breakpoint")
+    {
+        for(int i =0; i < breakpoints.size(); ++i)
+        {
+            ostringstream out;
+            out << i << " : " << breakpoints[i]->describe();;
+            interf.answer(out);
+        }
+    }
+    else
+    {
+        return errMess.badArgs();
+    }
+        
+    return true;
+}
+
+bool Debugger::clear(const vector<string>& args)
+{
+    if(args.size() != 1)
+    {
+        return errMess.badNumberArgs();         
+    }
+    try
+    {
+        clearBreakpoint(stoi(args[0]));
+    }
+    catch(const exception& ex)
+    {
+        errMess.badArgs();
+    }
+    
     return true;
 }
 
