@@ -52,6 +52,9 @@ private:
     //Correspondances instructions <-> codage
     Dissassembler dis;
     
+    //Pour la commande until
+    int pc_lim;//-1 : pas de commande until en cours
+    
     //Tables de hashage pour parser
     unordered_map<string, breakpoint::Breakpoint_t> break_commands;
 

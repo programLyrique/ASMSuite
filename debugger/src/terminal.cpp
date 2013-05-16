@@ -31,6 +31,7 @@ Terminal::Terminal()
     commands["next"] = command::NEXT;
     commands["n"] = command::NEXT;
     commands["step"] = command::STEP;
+    commands["until"] = command::UNTIL;
     commands["help"] = command::HELP;
     commands["info"] = command::INFO;
     commands["clear"] = command::CLEAR;

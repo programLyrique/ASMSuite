@@ -13,7 +13,7 @@ namespace debugger
 {
 
 Debugger::Debugger(CommandInterface& inter, CPU* cpu) : interf(inter), errMess(inter),
-sim(cpu), n_instr(1), nb_cycles(0)
+sim(cpu), n_instr(1), nb_cycles(0), pc_lim(-1)
 {
 
     //On attache le debugger à l'interface
@@ -49,6 +49,12 @@ bool Debugger::interact()
             breaks = true;
             break;
         }
+    }
+    
+    if(sim->getBus_pc() == pc_lim)
+    {
+        breaks = true;
+        pc_lim = -1;
     }
     if (n_instr > 0)
     {
@@ -122,6 +128,16 @@ bool Debugger::interact()
             case command::STEP:
                 step(args);
                 cont = false;
+                break;
+            /*Equivalent à mettre un breakpoint sur PC+1 où PC est enregistré au moment
+             * de la commande.
+             * Mais problème de cette solution : il faudrait supprimer le breakpoint une fois atteint.
+             * On préfère faire une gestion séparée.
+             */
+            case command::UNTIL:
+                pc_lim = sim->getBus_pc()+1;
+                cont = false;
+                n_instr = -1;
                 break;
             case command::HELP:
                 errMess.notSupported();

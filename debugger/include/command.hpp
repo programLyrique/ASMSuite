@@ -35,6 +35,7 @@ enum Command
     RUN,
     NEXT,
     STEP,
+    UNTIL,
     HELP,
     INFO,
     CLEAR,
