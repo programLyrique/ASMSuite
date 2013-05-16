@@ -3,6 +3,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <chrono>
 
 #include "commandInterface.hpp"
 #include "terminal.hpp"
@@ -12,7 +13,8 @@ using namespace std;
 namespace debugger
 {
 
-Debugger::Debugger(CommandInterface& inter, CPU* cpu) : interf(inter), errMess(inter),
+Debugger::Debugger(CommandInterface& inter, CPU* cpu) :
+interf(inter), errMess(inter),
 sim(cpu), n_instr(1), nb_cycles(0), pc_lim(-1)
 {
 
@@ -38,6 +40,7 @@ sim(cpu), n_instr(1), nb_cycles(0), pc_lim(-1)
 
 bool Debugger::interact()
 {
+    chronometre.press();//on stoppe le chrono car le temps de debugage ne fait pas partie des festivités
     bool contDebug = true;
 
     //Point d'arrêt ?
@@ -50,8 +53,8 @@ bool Debugger::interact()
             break;
         }
     }
-    
-    if(sim->getBus_pc() == pc_lim)
+
+    if (sim->getBus_pc() == pc_lim)
     {
         breaks = true;
         pc_lim = -1;
@@ -129,13 +132,13 @@ bool Debugger::interact()
                 step(args);
                 cont = false;
                 break;
-            /*Equivalent à mettre un breakpoint sur PC+1 où PC est enregistré au moment
-             * de la commande.
-             * Mais problème de cette solution : il faudrait supprimer le breakpoint une fois atteint.
-             * On préfère faire une gestion séparée.
-             */
+                /*Equivalent à mettre un breakpoint sur PC+1 où PC est enregistré au moment
+                 * de la commande.
+                 * Mais problème de cette solution : il faudrait supprimer le breakpoint une fois atteint.
+                 * On préfère faire une gestion séparée.
+                 */
             case command::UNTIL:
-                pc_lim = sim->getBus_pc()+1;
+                pc_lim = sim->getBus_pc() + 1;
                 cont = false;
                 n_instr = -1;
                 break;
@@ -147,6 +150,9 @@ bool Debugger::interact()
                 break;
             case command::SHELL:
                 shell(args);
+                break;
+            case command::TIME:
+                time(args);
                 break;
             case command::CLEAR:
                 clear(args);
@@ -165,6 +171,7 @@ bool Debugger::interact()
         Terminal::resetInterrupt();
     }
 
+    chronometre.press();//On relance le chronometre
     return contDebug;
 }
 
@@ -640,7 +647,6 @@ void Debugger::addBreakpoint(Breakpoint* breakpoint)
     breakpoints.push_back(breakpoint);
 }
 
-
 void Debugger::clearBreakpoint(int num)
 {
     breakpoints.erase(breakpoints.begin() + num);
@@ -648,17 +654,18 @@ void Debugger::clearBreakpoint(int num)
 
 bool Debugger::info(const vector<string>& args)
 {
-    if(args.size() != 1)
+    if (args.size() != 1)
     {
         return errMess.badNumberArgs();
     }
-    
-    if(args[0] == "breakpoint")
+
+    if (args[0] == "breakpoint")
     {
-        for(int i =0; i < breakpoints.size(); ++i)
+        for (int i = 0; i < breakpoints.size(); ++i)
         {
             ostringstream out;
-            out << i << " : " << breakpoints[i]->describe();;
+            out << i << " : " << breakpoints[i]->describe();
+            ;
             interf.answer(out);
         }
     }
@@ -666,25 +673,25 @@ bool Debugger::info(const vector<string>& args)
     {
         return errMess.badArgs();
     }
-        
+
     return true;
 }
 
 bool Debugger::clear(const vector<string>& args)
 {
-    if(args.size() != 1)
+    if (args.size() != 1)
     {
-        return errMess.badNumberArgs();         
+        return errMess.badNumberArgs();
     }
     try
     {
         clearBreakpoint(stoi(args[0]));
     }
-    catch(const exception& ex)
+    catch (const exception& ex)
     {
         errMess.badArgs();
     }
-    
+
     return true;
 }
 
@@ -692,11 +699,34 @@ bool Debugger::shell(const vector<string>& args)
 {
     //Reconcaténer les tokens
     string concat;
-    for(int i=0; i < args.size(); ++i)
+    for (int i = 0; i < args.size(); ++i)
     {
         concat += " " + args[i];
     }
     return system(concat.c_str());
+}
+
+bool Debugger::time(const vector<string>& args)
+{
+    if(args.size() !=1)
+    {
+        return errMess.badNumberArgs();
+    }
+    
+    if(args[0] == "start")
+    {
+        chronometre.start();
+    }
+    else if(args[0] == "stop")
+    {
+        ostringstream out;
+        out << "Temps écoulé : " << chronometre.timeElapsed().count() << " millisecondes";
+        interf.answer(out);
+    }
+    else
+    {
+        return errMess.badArgs();
+    }
 }
 
 }

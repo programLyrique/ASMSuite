@@ -20,6 +20,7 @@ public:
     Chrono();
     void press();
     void start();
+    void reset();
     high_resolution_clock::duration timeElapsed() const;
     virtual ~Chrono();
 private:

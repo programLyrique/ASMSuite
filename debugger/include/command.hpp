@@ -39,6 +39,7 @@ enum Command
     HELP,
     INFO,
     SHELL,
+    TIME,
     CLEAR,
     EXIT
 };

@@ -16,6 +16,7 @@
 #include "search.hpp"
 #include "errorMessages.hpp"
 #include "dissassembler.hpp"
+#include "chrono.hpp"
 
 namespace debugger
 {
@@ -54,6 +55,9 @@ private:
     
     //Pour la commande until
     int pc_lim;//-1 : pas de commande until en cours
+    
+    //Un chronomètre
+    Chrono chronometre;
     
     //Tables de hashage pour parser
     unordered_map<string, breakpoint::Breakpoint_t> break_commands;
@@ -126,6 +130,12 @@ private:
      */
     bool shell(const vector<string>& args);
 
+    /**
+     * Gère les commandes pour chronométrer.
+     * @param args
+     * @return 
+     */
+    bool time(const vector<string>& args);
     
 public:
 

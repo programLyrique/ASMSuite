@@ -53,5 +53,10 @@ Chrono::~Chrono()
 {
 }
 
+void Chrono::reset()
+{
+    start();
+}
+
 }
 

@@ -36,6 +36,7 @@ Terminal::Terminal()
     commands["h"] = command::HELP;
     commands["info"] = command::INFO;
     commands["!"] = command::SHELL;
+    commands["time"] = command::TIME;
     commands["clear"] = command::CLEAR;
     commands["exit"] = command::EXIT;
 
