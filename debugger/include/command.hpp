@@ -38,6 +38,7 @@ enum Command
     UNTIL,
     HELP,
     INFO,
+    SHELL,
     CLEAR,
     EXIT
 };

@@ -34,6 +34,7 @@ Terminal::Terminal()
     commands["until"] = command::UNTIL;
     commands["help"] = command::HELP;
     commands["info"] = command::INFO;
+    commands["!"] = command::SHELL;
     commands["clear"] = command::CLEAR;
     commands["exit"] = command::EXIT;
 

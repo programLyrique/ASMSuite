@@ -118,6 +118,13 @@ private:
      * @return 
      */
     bool step(const vector<string>& args);
+    
+    /**
+     * Exécuter une commande shell
+     * @param args
+     * @return 
+     */
+    bool shell(const vector<string>& args);
 
     
 public:

@@ -145,6 +145,9 @@ bool Debugger::interact()
             case command::INFO:
                 info(args);
                 break;
+            case command::SHELL:
+                shell(args);
+                break;
             case command::CLEAR:
                 clear(args);
                 break;
@@ -683,6 +686,17 @@ bool Debugger::clear(const vector<string>& args)
     }
     
     return true;
+}
+
+bool Debugger::shell(const vector<string>& args)
+{
+    //Reconcaténer les tokens
+    string concat;
+    for(int i=0; i < args.size(); ++i)
+    {
+        concat += " " + args[i];
+    }
+    return system(concat.c_str());
 }
 
 }
