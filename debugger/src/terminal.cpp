@@ -33,6 +33,7 @@ Terminal::Terminal()
     commands["step"] = command::STEP;
     commands["until"] = command::UNTIL;
     commands["help"] = command::HELP;
+    commands["h"] = command::HELP;
     commands["info"] = command::INFO;
     commands["!"] = command::SHELL;
     commands["clear"] = command::CLEAR;
